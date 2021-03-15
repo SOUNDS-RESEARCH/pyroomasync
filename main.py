@@ -1,5 +1,5 @@
-from plotter import plot_simulation_results
 from simulator import simulate
+from doa import estimate
 
-room = simulate()
-plot_simulation_results(room)
+results = simulate()
+estimate(results)

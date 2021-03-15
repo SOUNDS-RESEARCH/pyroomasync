@@ -2,21 +2,23 @@ import numpy as np
 import pyroomacoustics as pra
 
 from settings import (
-    ABSORPTION, FS, MAX_ORDER,
-    MIC_LOC, ROOM_DIM, SOURCE_LOC,
-    SOURCE_SIGNAL
+    DISTANCE, FS, MIC_LOCATIONS,
+    ROOM_DIM, SNR, SOURCE_LOCATION, SOURCE_SIGNAL
 )
 
 def simulate():
-    # Create the room itself
-    room = pra.ShoeBox(ROOM_DIM, fs=FS, absorption=ABSORPTION, max_order=MAX_ORDER)
-    room.add_source(SOURCE_LOC, signal=SOURCE_SIGNAL)
+    # compute the noise variance
+    sigma2 = 10 ** (-SNR / 10) / (4.0 * np.pi * DISTANCE) ** 2
 
-    # Place the microphone array
-    microphone_array = pra.MicrophoneArray(MIC_LOC, fs=FS)
-    room.add_microphone_array(microphone_array)
+    room = pra.ShoeBox(ROOM_DIM, fs=FS, max_order=0, sigma2_awgn=sigma2)
+    room.add_source(SOURCE_LOCATION, signal=SOURCE_SIGNAL)
 
-    # Now the setup is finished, run the simulation
+    # We use a circular array with radius 15 cm # and 12 microphones
+
+    microphones = pra.MicrophoneArray(MIC_LOCATIONS, fs=FS)
+    room.add_microphone_array(microphones)
+
+    # run the simulation
     room.simulate()
 
     return room

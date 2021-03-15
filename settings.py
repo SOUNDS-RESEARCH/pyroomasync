@@ -1,14 +1,22 @@
 import numpy as np
+import pyroomacoustics as pra
 
-# Simulation parameters
 FS = 16000
-ABSORPTION = 0.25
-MAX_ORDER = 17
+SNR = 0.0  # signal-to-noise ratio
+C = 343.0  # speed of sound
+NFFT = 256  # FFT size
+FREQ_BINS = np.arange(5, 60)  # FFT bins to use for estimation
 
-# Geometry of the room and location of sources and microphones
-ROOM_DIM = np.array([20, 15, 6])
-SOURCE_LOC = np.array([2.51, 3.57, 1.7])
-MIC_LOC = np.c_[[7, 6.1, 1.3],[6.9, 6.1, 1.3]]
+# Room parameters
+ROOM_DIM = np.r_[10.0, 10.0]
 
-# Place a source of white noise playing for 5 s
-SOURCE_SIGNAL = np.random.randn(FS * 5)
+# Source parameters
+AZIMUTH = 61.0 / 180.0 * np.pi  # 60 degrees
+DISTANCE = 3.0  # 3 meters
+SOURCE_LOCATION = ROOM_DIM / 2 + DISTANCE * np.r_[np.cos(AZIMUTH), np.sin(AZIMUTH)]
+SOURCE_SIGNAL = np.random.randn((NFFT // 2 + 1) * NFFT)
+
+# Microphone location
+MIC_LOCATIONS = pra.circular_2D_array(ROOM_DIM / 2, 12, 0.0, 0.15)
+
+
