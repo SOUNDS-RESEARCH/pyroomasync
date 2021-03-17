@@ -1,5 +1,5 @@
 from simulator import simulate
-from doa import estimate
+from analysis import compare_doa_estimators
 
 results = simulate()
-estimate(results)
+compare_doa_estimators(results)

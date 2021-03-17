@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from pyroomacoustics.doa import circ_dist
-
 from settings import FS
 
 def _plot_microphone_signals(mic_signals):
@@ -28,17 +26,5 @@ def plot_simulation_results(room):
     # Plot the impulse responses
     plt.figure()
     room.plot_rir()
-
-    plt.show()
-
-
-def plot_doa(doa, algo_name, expected_azimuth):
-    doa.polar_plt_dirac()
-    plt.title(algo_name)
-
-    # doa.azimuth_recon contains the reconstructed location of the source
-    print(algo_name)
-    print("  Recovered azimuth:", doa.azimuth_recon / np.pi * 180.0, "degrees")
-    print("  Error:", circ_dist(expected_azimuth, doa.azimuth_recon) / np.pi * 180.0, "degrees")
 
     plt.show()

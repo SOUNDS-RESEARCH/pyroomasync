@@ -32,16 +32,35 @@ Then we perform DOA estimation and compare the errors for different algorithms
 """
 
 import numpy as np
-from scipy.signal import fftconvolve
 import matplotlib.pyplot as plt
 import pyroomacoustics as pra
+from scipy.signal import fftconvolve
 
-from plotter import plot_doa
+from logger import log_estimation_results
 from settings import (
-    AZIMUTH, FREQ_BINS, NFFT, MIC_LOCATIONS, FS, C
+    SOURCE_AZIMUTH, FREQ_BINS, NFFT, MIC_LOCATIONS, FS, C
 )
 
-def preprocess(signals):
+def create_estimators():
+    return [
+        DoaEstimator(estimator_name, estimator_func)
+        for estimator_name, estimator_func in pra.doa.algorithms.items()
+    ]
+
+class DoaEstimator:
+    def __init__(self, estimator_name, estimator_func):
+        self.estimator_name = estimator_name
+        self.estimator = estimator_func(
+            MIC_LOCATIONS, FS, NFFT, c=C, max_four=4)
+
+    def locate_sources(self, features):
+        self.estimator.locate_sources(features, freq_bins=FREQ_BINS)
+        log_estimation_results(self, SOURCE_AZIMUTH)
+
+    def polar_plt_dirac(self):
+        return self.estimator.polar_plt_dirac()
+
+def extract_features(signals):
     ################################
     # Compute the STFT frames needed
     return np.array(
@@ -51,17 +70,8 @@ def preprocess(signals):
         ]
     )
 
-def estimate(room):
-    signals = room.mic_array.signals
-    features = preprocess(signals)
 
-    available_algos = sorted(pra.doa.algorithms.keys())
-
-    for algo_name in available_algos:
-        # Construct the new DOA object
-        # the max_four parameter is necessary for FRIDA only
-        algorithm = pra.doa.algorithms[algo_name](MIC_LOCATIONS, FS, NFFT, c=C, max_four=4)
-
-        # this call here perform localization on the frames in X
-        algorithm.locate_sources(features, freq_bins=FREQ_BINS)
-        plot_doa(algorithm, algo_name, AZIMUTH)
+def locate_sources(features):
+    estimators = create_estimators()
+    for estimator in estimators:
+        estimator.locate_sources(features)
