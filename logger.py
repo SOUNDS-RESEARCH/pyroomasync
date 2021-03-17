@@ -20,6 +20,16 @@ def _estimation_error(estimated, ground_truth):
     return _azimuth_to_degrees(circ_dist(ground_truth, estimated))
 
 
+def log_error(result, ground_truth, output_dir):
+    
+    df = pd.DataFrame.from_records([{
+        "Recovered azimuth": _azimuth_to_degrees(result)[0],
+        "Error": _estimation_error(result, ground_truth)[0]}]
+    )
+
+    df.to_csv(os.path.join(output_dir, "metrics.csv"))
+
+
 def log_estimation_results(output_dir, estimator, ground_truth):
 
     result = estimator.estimator.azimuth_recon
@@ -30,15 +40,10 @@ def log_estimation_results(output_dir, estimator, ground_truth):
 
     plot_dirac(
         estimator.estimator,
-        os.path.join(output_dir, "dirac.png"))
+        os.path.join(output_dir, "dirac.png"),
+        ground_truth)
 
-    df = pd.DataFrame.from_records([{
-        "Recovered azimuth": _azimuth_to_degrees(result)[0],
-        "Error": _estimation_error(result, ground_truth)[0]}]
-    )
-
-    df.to_csv(os.path.join(output_dir, "metrics.csv"))
-
+    log_error(result, ground_truth, output_dir)
 
 def log_simulation_results(room, output_dir):
     if not os.path.exists(output_dir):

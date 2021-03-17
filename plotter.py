@@ -23,8 +23,8 @@ def plot_microphone_signals(mic_signals, output_path):
     plt.savefig(output_path)
     
 
-def plot_dirac(estimator, output_path):
-    estimator.polar_plt_dirac()
+def plot_dirac(estimator, output_path, ground_truth):
+    estimator.polar_plt_dirac(azimuth_ref=np.array([ground_truth]))
     plt.savefig(output_path)
 
 

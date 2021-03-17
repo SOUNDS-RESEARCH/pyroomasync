@@ -39,8 +39,9 @@ import os
 
 from logger import log_estimation_results
 from settings import (
-    SOURCE_AZIMUTH, FREQ_BINS, NFFT, MIC_LOCATIONS, SR, C
+    SOURCE_AZIMUTH_IN_RADIANS, FREQ_BINS, NFFT, MIC_LOCATIONS, SR, C
 )
+
 
 def create_estimators(output_dir):
     return [
@@ -48,6 +49,7 @@ def create_estimators(output_dir):
         for estimator_name, estimator_func in pra.doa.algorithms.items()
         if estimator_name not in ["FRIDA"]
     ]
+
 
 class DoaEstimator:
     def __init__(self, estimator_name, estimator_func, output_dir):
@@ -59,7 +61,8 @@ class DoaEstimator:
 
     def locate_sources(self, features):
         self.estimator.locate_sources(features, freq_bins=FREQ_BINS)
-        log_estimation_results(self.output_dir, self, SOURCE_AZIMUTH)
+        log_estimation_results(self.output_dir, self,
+                               SOURCE_AZIMUTH_IN_RADIANS)
         return self.estimator.azimuth_recon
 
 
@@ -72,4 +75,3 @@ def extract_features(signals):
             for signal in signals
         ]
     )
-
