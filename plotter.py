@@ -1,40 +1,36 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from settings import FS
+import librosa, librosa.display
 
-def _plot_microphone_signals(mic_signals):
+from settings import SR
+
+def _plot_spectogram(signal):
+    D = librosa.stft(signal)  # STFT of y
+    S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
+    librosa.display.specshow(S_db, x_axis='time', y_axis='linear')
+
+def plot_microphone_signals(mic_signals, output_path):
     plt.figure()
-    plt.subplot(1,2,1)
-    plt.plot(np.arange(mic_signals.shape[1]) / FS, mic_signals[0])
-    plt.title('Microphone 0 signal')
-    plt.xlabel('Time [s]')
-    plt.subplot(1,2,2)
-    plt.plot(np.arange(mic_signals.shape[1]) / FS, mic_signals[1])
-    plt.title('Microphone 1 signal')
-    plt.xlabel('Time [s]')
+
+    n_mics = mic_signals.shape[0]
+    for i, mic_signal in enumerate(mic_signals):
+        plt.subplot(n_mics, 1, i + 1)
+        _plot_spectogram(mic_signal)
+        plt.title('Microphone {} signal'.format(i))
+        plt.xlabel('Time [s]')
+    #plt.colorbar(format="%+2.f dB")
     plt.tight_layout()
-
-
-def plot_simulation_results(room):
-    mic_signals = room.mic_array.signals
-    _plot_microphone_signals(mic_signals)
+    plt.savefig(output_path)
     
-    # Plot the room and the image sources
-    room.plot(img_order=4)
-    plt.title('The room with 4 generations of image sources')
 
-    # Plot the impulse responses
-    plt.figure()
-    room.plot_rir()
-
-    plt.show()
-
-
-def plot_dirac(estimator, ground_truth, output_path):
-    result = estimator.estimator.azimuth_recon
+def plot_dirac(estimator, output_path):
     estimator.polar_plt_dirac()
     plt.savefig(output_path)
+
 
 def plot_room(room, output_path):
     room.plot()
     plt.savefig(output_path)
+
+
+

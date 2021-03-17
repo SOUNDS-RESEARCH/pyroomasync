@@ -38,20 +38,21 @@ from scipy.signal import fftconvolve
 
 from logger import log_estimation_results
 from settings import (
-    SOURCE_AZIMUTH, FREQ_BINS, NFFT, MIC_LOCATIONS, FS, C
+    SOURCE_AZIMUTH, FREQ_BINS, NFFT, MIC_LOCATIONS, SR, C
 )
 
 def create_estimators():
     return [
         DoaEstimator(estimator_name, estimator_func)
         for estimator_name, estimator_func in pra.doa.algorithms.items()
+        if estimator_name not in ["FRIDA"]
     ]
 
 class DoaEstimator:
     def __init__(self, estimator_name, estimator_func):
         self.estimator_name = estimator_name
         self.estimator = estimator_func(
-            MIC_LOCATIONS, FS, NFFT, c=C, max_four=4)
+            MIC_LOCATIONS, SR, NFFT, c=C, max_four=4)
 
     def locate_sources(self, features):
         self.estimator.locate_sources(features, freq_bins=FREQ_BINS)
@@ -76,6 +77,6 @@ def locate_sources(features):
     estimators = create_estimators()
     
     return {
-        estimator.estimator_name:estimator.locate_sources(features)
+        estimator.estimator_name:estimator.locate_sources(features)[0]
         for estimator in estimators
     }
