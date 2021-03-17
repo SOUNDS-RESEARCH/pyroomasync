@@ -1,0 +1,24 @@
+import numpy as np
+
+from settings import (
+    SR, SIGNAL_DURATION_IN_SECONDS, LOW_FREQ_IN_HZ,
+    HIGH_FREQ_IN_HZ
+)
+
+def _noise():
+    return np.random.randn(SIGNAL_DURATION_IN_SECONDS*SR)
+
+def _sinusoid(freq_in_hz):
+    linear_samples = np.arange(SIGNAL_DURATION_IN_SECONDS*SR)
+    return np.sin(linear_samples*freq_in_hz)
+
+def create_signal(signal_type):
+    if signal_type == "low":
+        return _sinusoid(LOW_FREQ_IN_HZ)
+    elif signal_type == "high":
+        return _sinusoid(HIGH_FREQ_IN_HZ)
+    elif signal_type == "noise":
+        return _noise()
+
+def signal_types():
+    return ["low", "high", "noise"]

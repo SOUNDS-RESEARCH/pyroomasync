@@ -35,32 +35,33 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pyroomacoustics as pra
 from scipy.signal import fftconvolve
+import os
 
 from logger import log_estimation_results
 from settings import (
     SOURCE_AZIMUTH, FREQ_BINS, NFFT, MIC_LOCATIONS, SR, C
 )
 
-def create_estimators():
+def create_estimators(output_dir):
     return [
-        DoaEstimator(estimator_name, estimator_func)
+        DoaEstimator(estimator_name, estimator_func, output_dir)
         for estimator_name, estimator_func in pra.doa.algorithms.items()
         if estimator_name not in ["FRIDA"]
     ]
 
 class DoaEstimator:
-    def __init__(self, estimator_name, estimator_func):
+    def __init__(self, estimator_name, estimator_func, output_dir):
+        self.output_dir = os.path.join(output_dir, estimator_name)
+
         self.estimator_name = estimator_name
         self.estimator = estimator_func(
             MIC_LOCATIONS, SR, NFFT, c=C, max_four=4)
 
     def locate_sources(self, features):
         self.estimator.locate_sources(features, freq_bins=FREQ_BINS)
-        log_estimation_results(self, SOURCE_AZIMUTH)
+        log_estimation_results(self.output_dir, self, SOURCE_AZIMUTH)
         return self.estimator.azimuth_recon
 
-    def polar_plt_dirac(self):
-        return self.estimator.polar_plt_dirac()
 
 def extract_features(signals):
     ################################
@@ -72,11 +73,3 @@ def extract_features(signals):
         ]
     )
 
-
-def locate_sources(features):
-    estimators = create_estimators()
-    
-    return {
-        estimator.estimator_name:estimator.locate_sources(features)[0]
-        for estimator in estimators
-    }
