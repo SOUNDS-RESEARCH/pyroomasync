@@ -28,3 +28,13 @@ def plot_simulation_results(room):
     room.plot_rir()
 
     plt.show()
+
+
+def plot_dirac(estimator, ground_truth, output_path):
+    result = estimator.estimator.azimuth_recon
+    estimator.polar_plt_dirac()
+    plt.savefig(output_path)
+
+def plot_room(room, output_path):
+    room.plot()
+    plt.savefig(output_path)

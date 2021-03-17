@@ -56,6 +56,7 @@ class DoaEstimator:
     def locate_sources(self, features):
         self.estimator.locate_sources(features, freq_bins=FREQ_BINS)
         log_estimation_results(self, SOURCE_AZIMUTH)
+        return self.estimator.azimuth_recon
 
     def polar_plt_dirac(self):
         return self.estimator.polar_plt_dirac()
@@ -73,5 +74,8 @@ def extract_features(signals):
 
 def locate_sources(features):
     estimators = create_estimators()
-    for estimator in estimators:
-        estimator.locate_sources(features)
+    
+    return {
+        estimator.estimator_name:estimator.locate_sources(features)
+        for estimator in estimators
+    }

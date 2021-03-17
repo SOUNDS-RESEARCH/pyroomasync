@@ -5,6 +5,7 @@ from settings import (
     DISTANCE, FS, MIC_LOCATIONS,
     ROOM_DIM, SNR, SOURCE_LOCATION, SOURCE_SIGNAL
 )
+from logger import log_room
 
 def simulate():
     # compute the noise variance
@@ -18,6 +19,7 @@ def simulate():
     microphones = pra.MicrophoneArray(MIC_LOCATIONS, fs=FS)
     room.add_microphone_array(microphones)
 
+    log_room(room)
     # run the simulation
     room.simulate()
 
