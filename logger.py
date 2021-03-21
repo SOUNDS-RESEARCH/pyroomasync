@@ -73,22 +73,26 @@ class SimulationLogger:
     def __init__(self, output_dir):
         self.room_logger = SceneLogger(output_dir)
         self.rir_logger = RirLogger(output_dir)
-    
+        self.mic_array_logger = MicArrayLogger(output_dir)
+
     def log(self, room):
         self.room_logger.log(room)
         self.rir_logger.log(room)
+        self.mic_array_logger.log(room)
+
 
 class MicSignalLogger(Logger):
     def __init__(self, output_dir, mic_id):
-        file_name = os.path.join(output_dir, "mic_signals_{}.wav".format(i))
+        file_name = "mic_signals_{}.wav".format(mic_id)
         super().__init__(output_dir, file_name)
 
     def log(self, mic_signal):
         sf.write(self.output_file_path, mic_signal, SR)
 
+
 class MicArrayLogger(Logger):
     def __init__(self, output_dir):
-        super.__init__(output_dir, "mic_signals.png")
+        super().__init__(output_dir, "mic_signals.png")
 
     def log(self, room):    
         mic_signals = room.mic_array.signals
@@ -96,4 +100,12 @@ class MicArrayLogger(Logger):
             logger = MicSignalLogger(self.output_dir, i)
             logger.log(mic_signal)
 
-        plot_microphone_signals(self.output_file_path)
+        plot_microphone_signals(mic_signals, self.output_file_path)
+
+class ExperimentLogger(Logger):
+    def __init__(self, output_dir):
+        super().__init__(output_dir, "results.csv")
+            
+    def log(self, estimation_results):
+        df = pd.DataFrame(estimation_results)
+        df.to_csv(self.output_file_path)

@@ -5,7 +5,7 @@ from estimators import create_estimators, extract_features
 from settings import BASE_OUTPUT_DIR
 from input_signals import signal_types
 from simulator import Simulation
-
+from logger import ExperimentLogger
 
 def compare_doa_estimators(room, output_dir):
     input_signals = room.mic_array.signals
@@ -19,8 +19,7 @@ def compare_doa_estimators(room, output_dir):
     }
 
 def compare_results_for_input_signals():
-    if not os.path.exists(BASE_OUTPUT_DIR):
-        os.mkdir(BASE_OUTPUT_DIR)
+    logger = ExperimentLogger(BASE_OUTPUT_DIR)
 
     available_signal_types = signal_types()
     
@@ -35,5 +34,4 @@ def compare_results_for_input_signals():
         estimation_result["SIGNAL_TYPE"] = signal_type
         estimation_results.append(estimation_result)
 
-    df = pd.DataFrame(estimation_results)
-    df.to_csv(os.path.join(BASE_OUTPUT_DIR, "results.csv"))
+    logger.log(estimation_results)
