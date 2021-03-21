@@ -6,12 +6,15 @@ from settings import (
     HIGH_FREQ_IN_HZ
 )
 
+
 def _noise():
     return np.random.randn(SIGNAL_DURATION_IN_SECONDS*SR)
+
 
 def _sinusoid(freq_in_hz):
     linear_samples = np.arange(SIGNAL_DURATION_IN_SECONDS*SR)
     return np.sin(linear_samples*freq_in_hz)
+
 
 def _speech():
     return librosa.load("speech_samples/p225_001.wav", sr=SR)[0]

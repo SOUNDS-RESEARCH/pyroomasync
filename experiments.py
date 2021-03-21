@@ -32,6 +32,7 @@ def compare_results_for_input_signals():
         
         estimation_result = compare_doa_estimators(
             simulation_result, output_dir)
+        estimation_result["SIGNAL_TYPE"] = signal_type
         estimation_results.append(estimation_result)
 
     df = pd.DataFrame(estimation_results)

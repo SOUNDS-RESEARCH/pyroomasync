@@ -37,7 +37,7 @@ import pyroomacoustics as pra
 from scipy.signal import fftconvolve
 import os
 
-from logger import log_estimation_results
+from logger import EstimatorLogger
 from settings import (
     SOURCE_AZIMUTH_IN_RADIANS, FREQ_BINS, NFFT, MIC_LOCATIONS, SR, C
 )
@@ -52,8 +52,9 @@ def create_estimators(output_dir):
 
 
 class DoaEstimator:
-    def __init__(self, estimator_name, estimator_func, output_dir):
-        self.output_dir = os.path.join(output_dir, estimator_name)
+    def __init__(self, estimator_name, estimator_func, log_dir):
+        self.log_dir = os.path.join(log_dir, estimator_name)
+        self.logger = EstimatorLogger(log_dir)
 
         self.estimator_name = estimator_name
         self.estimator = estimator_func(
@@ -61,8 +62,8 @@ class DoaEstimator:
 
     def locate_sources(self, features):
         self.estimator.locate_sources(features, freq_bins=FREQ_BINS)
-        log_estimation_results(self.output_dir, self,
-                               SOURCE_AZIMUTH_IN_RADIANS)
+        self.logger.log(self, SOURCE_AZIMUTH_IN_RADIANS)
+        
         return self.estimator.azimuth_recon
 
 

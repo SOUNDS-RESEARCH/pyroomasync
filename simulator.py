@@ -6,13 +6,14 @@ from settings import (
     SOURCE_AZIMUTH_IN_RADIANS,
     ROOM_DIM, ROOM_NOISE_VARIANCE
 )
-from logger import log_simulation_results
+from logger import SimulationLogger
 from input_signals import create_signal
 
 class Simulation:
-    def __init__(self, input_signal_type, output_folder):
+    def __init__(self, input_signal_type, log_dir):
         self.input_signal_type = input_signal_type
-        self.output_folder = output_folder
+        self.logger = SimulationLogger(log_dir)
+
         input_signal = create_signal(input_signal_type)
         
         self.room = pra.ShoeBox(
@@ -32,6 +33,6 @@ class Simulation:
 
         self.room.simulate()
 
-        log_simulation_results(self.room, self.output_folder)
+        self.logger.log(self.room)
 
         return self.room
