@@ -1,8 +1,8 @@
 # dereverberator
 
-## Install
-(Optional) Create a virtualenv `$mkvirtualenv asynchronous-doa-simulator`
-Execute the command `$pip install -r requirements.txt`
+## Installation
+1. (Optional) Create a virtualenv `$mkvirtualenv asynchronous-doa-simulator`
+2. Execute the command `$pip install -r requirements.txt`
 
 ## Run simulations
 

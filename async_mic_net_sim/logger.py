@@ -1,15 +1,14 @@
+from settings import SR
+from math_utils import azimuth_to_degrees, estimation_error
+from plotter import (
+    plot_dirac, plot_room, plot_microphone_signals
+)
 import soundfile as sf
 import matplotlib.pyplot as plt
 import os
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore")
-
-from plotter import (
-    plot_dirac, plot_room, plot_microphone_signals
-)
-from math_utils import azimuth_to_degrees, estimation_error
-from settings import SR
 
 
 class Logger:
@@ -21,21 +20,23 @@ class Logger:
 
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
-    
+
     def log(self):
         pass
+
 
 class ErrorLogger(Logger):
     def __init__(self, output_dir):
         super().__init__(output_dir, "metrics.csv")
-        
+
     def log(self, result, ground_truth):
         df = pd.DataFrame.from_records([{
             "Recovered azimuth": azimuth_to_degrees(result)[0],
             "Error": estimation_error(result, ground_truth)[0]}]
         )
         df.to_csv(self.output_file_path)
-    
+
+
 class EstimatorLogger(Logger):
     def __init__(self, output_dir):
         super().__init__(output_dir, "dirac.png")
@@ -65,7 +66,7 @@ class SceneLogger(Logger):
     def __init__(self, output_dir):
         super().__init__(output_dir, "room.png")
 
-    def log(self, room):  
+    def log(self, room):
         plot_room(room, self.output_file_path)
 
 
@@ -94,7 +95,7 @@ class MicArrayLogger(Logger):
     def __init__(self, output_dir):
         super().__init__(output_dir, "mic_signals.png")
 
-    def log(self, room):    
+    def log(self, room):
         mic_signals = room.mic_array.signals
         for i, mic_signal in enumerate(mic_signals):
             logger = MicSignalLogger(self.output_dir, i)
@@ -102,10 +103,11 @@ class MicArrayLogger(Logger):
 
         plot_microphone_signals(mic_signals, self.output_file_path)
 
+
 class ExperimentLogger(Logger):
     def __init__(self, output_dir):
         super().__init__(output_dir, "results.csv")
-            
+
     def log(self, estimation_results):
         df = pd.DataFrame(estimation_results)
         df.to_csv(self.output_file_path)
