@@ -2,3 +2,4 @@ pyroomacoustics
 matplotlib
 pandas
 librosa
+pytest

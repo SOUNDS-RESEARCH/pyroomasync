@@ -1,15 +1,13 @@
 import os
-import pandas as pd
 
-from estimators import create_estimators, extract_features
-from settings import BASE_OUTPUT_DIR
-from input_signals import signal_types
-from simulator import Simulation
-from logger import ExperimentLogger
+from experiments.estimators import create_estimators, extract_features
+from experiments.settings import BASE_OUTPUT_DIR
+from experiments.create_signal import signal_types
+from experiments.simulator import Simulation
+from experiments.logger import ExperimentLogger
 
 
-def compare_doa_estimators(room, output_dir):
-    input_signals = room.mic_array.signals
+def compare_doa_estimators(input_signals, output_dir):
     features = extract_features(input_signals)
 
     estimators = create_estimators(output_dir)

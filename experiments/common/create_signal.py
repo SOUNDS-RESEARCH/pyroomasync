@@ -1,7 +1,7 @@
 import numpy as np
 import librosa
 
-from settings import (
+from experiments.settings import (
     SR, SIGNAL_DURATION_IN_SECONDS, LOW_FREQ_IN_HZ,
     HIGH_FREQ_IN_HZ
 )

@@ -1,13 +1,14 @@
 import numpy as np
 import pyroomacoustics as pra
 
-from settings import (
+from experiments.settings import (
     DISTANCE, SR, MIC_LOCATIONS,
     SOURCE_AZIMUTH_IN_RADIANS,
     ROOM_DIM, ROOM_NOISE_VARIANCE
 )
-from logger import SimulationLogger
-from input_signals import create_signal
+from experiments.logger import SimulationLogger
+from experiments.create_signal import create_signal
+from experiments.math_utils import compute_source_location
 
 
 class Simulation:
@@ -20,13 +21,14 @@ class Simulation:
         self.room = pra.ShoeBox(
             ROOM_DIM, fs=SR, max_order=0, sigma2_awgn=ROOM_NOISE_VARIANCE)
 
-        source_location = self._compute_source_location()
+        source_location = compute_source_location(
+            SOURCE_AZIMUTH_IN_RADIANS,
+            DISTANCE,
+            ROOM_DIM
+        )
 
         self.room.add_source(source_location, signal=input_signal)
         self.room.add_microphone_array(MIC_LOCATIONS)
-
-    def _compute_source_location(self):
-        return ROOM_DIM / 2 + DISTANCE * np.r_[np.cos(SOURCE_AZIMUTH_IN_RADIANS), np.sin(SOURCE_AZIMUTH_IN_RADIANS)]
 
     def run(self):
         print("Running simulation with '{}' signal type".format(
@@ -36,4 +38,4 @@ class Simulation:
 
         self.logger.log(self.room)
 
-        return self.room
+        return self.room.mic_array.signals

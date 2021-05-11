@@ -1,6 +1,6 @@
-from settings import SR
-from math_utils import azimuth_to_degrees, estimation_error
-from plotter import (
+from experiments.settings import SR
+from experiments.math_utils import azimuth_to_degrees, estimation_error
+from experiments.plotter import (
     plot_dirac, plot_room, plot_microphone_signals
 )
 import soundfile as sf

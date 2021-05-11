@@ -10,6 +10,6 @@ def estimation_error(estimated, ground_truth):
     return azimuth_to_degrees(circ_dist(ground_truth, estimated))
 
 
-def _compute_source_location(self, azimuth, distance, room_dim):
+def compute_source_location(azimuth, distance, room_dim):
     az = np.r_[np.cos(azimuth), np.sin(azimuth)]
     return room_dim / 2 + distance * az

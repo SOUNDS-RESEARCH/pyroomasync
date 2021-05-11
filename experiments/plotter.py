@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import librosa, librosa.display
 
-from settings import SR
+from experiments.settings import SR
 
 def _plot_spectogram(signal):
     D = librosa.stft(signal)  # STFT of y
