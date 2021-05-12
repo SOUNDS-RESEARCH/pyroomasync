@@ -3,12 +3,11 @@ import pyroomacoustics as pra
 from pyroomacoustics.beamforming import MicrophoneArray
 
 from pyroomasync.mic_network_simulator import simulate_latency
-
-DEFAULT_FS = 44100
+from pyroomasync.settings import DEFAULT_ROOM_FS
 
 class ConnectedShoeBox(pra.ShoeBox):
     def __init__(self, dims, **kwargs):
-        super().__init__(dims, fs=DEFAULT_FS, **kwargs)
+        super().__init__(dims, fs=DEFAULT_ROOM_FS, **kwargs)
 
         self.mic_latencies = []
         self.mic_fs = []

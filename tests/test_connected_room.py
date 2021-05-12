@@ -3,10 +3,6 @@ from pyroomacoustics import ShoeBox
 
 from pyroomasync.connected_room import ConnectedShoeBox
 from experiments.common.create_signal import create_signal
-from experiments.common.math_utils import compute_source_location
-from experiments.settings import (
-    ROOM_DIM, SR, SOURCE_AZIMUTH_IN_RADIANS, DISTANCE, MIC_LOCATIONS
-)
 
 
 def test_simulate():

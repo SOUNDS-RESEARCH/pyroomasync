@@ -1,9 +1,9 @@
 import os
 
 from experiments.common.estimators import create_estimators, extract_features
-from experiments.settings import BASE_OUTPUT_DIR
+from experiments.common.settings import BASE_OUTPUT_DIR
 from experiments.common.create_signal import signal_types
-from experiments.simulator import Simulation
+from experiments.common.simulator import Simulation
 from experiments.common.logger import ExperimentLogger
 
 

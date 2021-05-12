@@ -1,7 +1,7 @@
 import numpy as np
 import pyroomacoustics as pra
 
-SR = 16000
+SR = 44100
 C = 343.0  # speed of sound
 NFFT = 256  # FFT size
 FREQ_BINS = np.arange(5, 60)  # FFT bins to use for estimation

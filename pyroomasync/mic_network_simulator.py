@@ -1,5 +1,10 @@
 import numpy as np
 
+from scipy.signal import resample
+
+from pyroomasync.settings import DEFAULT_ROOM_FS
+
+
 def simulate_latency(signals, latencies, fs):
     """Simulate adding a certain latency to each signal
 
@@ -14,7 +19,6 @@ def simulate_latency(signals, latencies, fs):
     """
 
     n_signals, n_signal = signals.shape
-    #breakpoint()
     mic_delayed_samples = fs*np.array(latencies)
     max_delayed_samples = int(mic_delayed_samples.max()) 
     n_output_signal = n_signal + max_delayed_samples
@@ -28,3 +32,14 @@ def simulate_latency(signals, latencies, fs):
         output_signals[i, n_delayed_samples:n_end_signal] = signals[i]
 
     return output_signals
+
+
+def simulate_sampling_rates(signals, mic_fs, room_fs=DEFAULT_ROOM_FS):
+    n_signals, n_signal = signals.shape
+    resampled_signals = np.zeros_like(signals)
+
+    for i in range(n_signals):
+        n_new_signal = int(n_signal*(mic_fs[i]/room_fs))
+        resampled_signals[i,:n_new_signal] = resample(signals[i], n_new_signal)
+
+    return resampled_signals
