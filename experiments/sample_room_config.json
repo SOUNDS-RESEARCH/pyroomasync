@@ -17,12 +17,12 @@
         {
             "location": [2, 2],
             "sr": 15999,
-            "latency": 0.01
+            "latency": 0.1
         },
         {
             "location": [3, 3],
             "sr": 32000,
-            "latency": 0.02
+            "latency": 0.2
         }
     ]
 }

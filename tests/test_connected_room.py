@@ -23,7 +23,7 @@ def test_simulate():
     room.add_microphone_array(mic_locations)
     room.simulate()
 
-    connected_room_results = connected_room.mic_array.connected_signals
+    connected_room_results = connected_room.connected_mic_array.signals
     room_results = room.mic_array.signals
     
     # Assert delayed signals will start being received after a delay

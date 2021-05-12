@@ -1,4 +1,5 @@
 pyroomacoustics
+samplerate
 matplotlib
 pandas
 librosa

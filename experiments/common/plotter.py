@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import librosa, librosa.display
 
-from experiments.settings import SR
 
 def _plot_spectogram(signal):
     D = librosa.stft(signal)  # STFT of y
@@ -31,6 +30,3 @@ def plot_dirac(estimator, output_path, ground_truth):
 def plot_room(room, output_path):
     room.plot()
     plt.savefig(output_path)
-
-
-

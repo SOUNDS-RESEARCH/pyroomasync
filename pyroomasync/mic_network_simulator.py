@@ -39,7 +39,13 @@ def simulate_sampling_rates(signals, mic_fs, room_fs=DEFAULT_ROOM_FS):
     resampled_signals = np.zeros_like(signals)
 
     for i in range(n_signals):
-        n_new_signal = int(n_signal*(mic_fs[i]/room_fs))
-        resampled_signals[i,:n_new_signal] = resample(signals[i], n_new_signal)
+        resampling_rate = (mic_fs[i]/room_fs)
+        if resampling_rate == 1:
+            # Do not resample
+            resampled_signals[i,:] = signals[i]
+        else:
+            n_new_signal = int(n_signal*resampling_rate)
+            resampled_signals[i,:n_new_signal] = resample(
+                                                    signals[i], n_new_signal)
 
     return resampled_signals

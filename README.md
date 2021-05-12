@@ -12,5 +12,12 @@ package to simulate such asynchronous microphone networks. It allows microphones
 * Imprecise sampling rates (16.000Hz vs 16.001Hz, for example)
 
 
+## Installation
+Install the required Python packages using `pip install -r requirements.txt`
+
 ## Speech samples 
 The speech samples used were taken from the [VCTK dataset](https://datashare.ed.ac.uk/handle/10283/2950) created at the University of Edinburgh.
+
+## Running experiments
+The `experiments` module contains experiments using Pyroomasync.
+You can run experiments by running the command `python -m experiments.runner path_to_experiment_config_file`. For example, you can run `python -m experiments.runner experiments/sample_room_config.json`. The output files for the experiment will be saved in the `logs` folder
