@@ -1,6 +1,6 @@
 from experiments.settings import SR
-from experiments.math_utils import azimuth_to_degrees, estimation_error
-from experiments.plotter import (
+from experiments.common.math_utils import azimuth_to_degrees, estimation_error
+from experiments.common.plotter import (
     plot_dirac, plot_room, plot_microphone_signals
 )
 import soundfile as sf
@@ -18,39 +18,10 @@ class Logger:
         if file_name:
             self.output_file_path = os.path.join(output_dir, file_name)
 
-        if not os.path.exists(output_dir):
-            os.mkdir(output_dir)
+        os.makedirs(output_dir, exist_ok=True)
 
     def log(self):
         pass
-
-
-class ErrorLogger(Logger):
-    def __init__(self, output_dir):
-        super().__init__(output_dir, "metrics.csv")
-
-    def log(self, result, ground_truth):
-        df = pd.DataFrame.from_records([{
-            "Recovered azimuth": azimuth_to_degrees(result)[0],
-            "Error": estimation_error(result, ground_truth)[0]}]
-        )
-        df.to_csv(self.output_file_path)
-
-
-class EstimatorLogger(Logger):
-    def __init__(self, output_dir):
-        super().__init__(output_dir, "dirac.png")
-        self.error_logger = ErrorLogger(output_dir)
-
-    def log(self, estimator, ground_truth):
-        result = estimator.estimator.azimuth_recon
-
-        plot_dirac(
-            estimator.estimator,
-            self.output_file_path,
-            ground_truth)
-
-        self.error_logger.log(result, ground_truth)
 
 
 class RirLogger(Logger):
@@ -111,3 +82,31 @@ class ExperimentLogger(Logger):
     def log(self, estimation_results):
         df = pd.DataFrame(estimation_results)
         df.to_csv(self.output_file_path)
+
+
+class ErrorLogger(Logger):
+    def __init__(self, output_dir):
+        super().__init__(output_dir, "metrics.csv")
+
+    def log(self, result, ground_truth):
+        df = pd.DataFrame.from_records([{
+            "Recovered azimuth": azimuth_to_degrees(result)[0],
+            "Error": estimation_error(result, ground_truth)[0]}]
+        )
+        df.to_csv(self.output_file_path)
+
+
+class EstimatorLogger(Logger):
+    def __init__(self, output_dir):
+        super().__init__(output_dir, "dirac.png")
+        self.error_logger = ErrorLogger(output_dir)
+
+    def log(self, estimator, ground_truth):
+        result = estimator.estimator.azimuth_recon
+
+        plot_dirac(
+            estimator.estimator,
+            self.output_file_path,
+            ground_truth)
+
+        self.error_logger.log(result, ground_truth)

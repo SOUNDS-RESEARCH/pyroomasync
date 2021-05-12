@@ -1,10 +1,10 @@
 import os
 
-from experiments.estimators import create_estimators, extract_features
+from experiments.common.estimators import create_estimators, extract_features
 from experiments.settings import BASE_OUTPUT_DIR
-from experiments.create_signal import signal_types
+from experiments.common.create_signal import signal_types
 from experiments.simulator import Simulation
-from experiments.logger import ExperimentLogger
+from experiments.common.logger import ExperimentLogger
 
 
 def compare_doa_estimators(input_signals, output_dir):

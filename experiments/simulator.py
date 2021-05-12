@@ -6,9 +6,9 @@ from experiments.settings import (
     SOURCE_AZIMUTH_IN_RADIANS,
     ROOM_DIM, ROOM_NOISE_VARIANCE
 )
-from experiments.logger import SimulationLogger
-from experiments.create_signal import create_signal
-from experiments.math_utils import compute_source_location
+from experiments.common.logger import SimulationLogger
+from experiments.common.create_signal import create_signal
+from experiments.common.math_utils import compute_source_location
 
 
 class Simulation:

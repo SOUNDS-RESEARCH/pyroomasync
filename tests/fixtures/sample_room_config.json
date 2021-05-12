@@ -1,0 +1,29 @@
+{
+    "room":{
+        "dims":[4, 6],
+        "sr": 44100
+    },
+    "sources":[
+        {
+            "location":[4, 4],
+            "signal_file_path": "experiments/signals/vctk/p225_001.wav"
+        }
+    ],
+    "microphones":[
+        {
+            "location": [1, 1],
+            "sr": 16001,
+            "latency": 0
+        },
+        {
+            "location": [2, 2],
+            "sr": 15999,
+            "latency": 0.01
+        },
+        {
+            "location": [3, 3],
+            "sr": 32000,
+            "latency": 0.02
+        }
+    ]
+}
