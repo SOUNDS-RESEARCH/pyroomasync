@@ -1,6 +1,6 @@
 import numpy as np
 
-from pyroomasync.mic_network_simulator import simulate_sampling_rates
+from pyroomasync.filters import simulate_sampling_rates
 
 
 def test_simulate_sampling_rates():

@@ -1,25 +1,24 @@
 import numpy as np
-
 from scipy.signal import resample
 
 from pyroomasync.settings import DEFAULT_ROOM_FS
 
 
-def simulate_latency(signals, latencies, fs):
+def simulate_latency(signals, latencies, room_fs):
     """Simulate adding a certain latency to each signal
 
     Args:
         signals (np.array): Matrix containing one signal per row
         latencies (np.array): Array of size equal to the number of signals, where every 
                               element corresponds to the latency of that signal in seconds
-        fs (int): Sampling frequency of the matrix
+        room_fs (int): Sampling frequency of the matrix
 
     Returns:
         (np.array): Array where every signal is delayed by its corresponding latency
     """
 
     n_signals, n_signal = signals.shape
-    mic_delayed_samples = fs*np.array(latencies)
+    mic_delayed_samples = room_fs*np.array(latencies)
     max_delayed_samples = int(mic_delayed_samples.max()) 
     n_output_signal = n_signal + max_delayed_samples
     output_signals = np.zeros(
@@ -35,6 +34,16 @@ def simulate_latency(signals, latencies, fs):
 
 
 def simulate_sampling_rates(signals, mic_fs, room_fs=DEFAULT_ROOM_FS):
+    """Samples signals to microphone signals and back to the original rate
+
+    Args:
+        signals ([type]): [description]
+        mic_fs ([type]): [description]
+        room_fs ([type], optional): [description]. Defaults to DEFAULT_ROOM_FS.
+
+    Returns:
+        [type]: [description]
+    """
     n_signals, n_signal = signals.shape
     resampled_signals = np.zeros_like(signals)
 
@@ -45,7 +54,10 @@ def simulate_sampling_rates(signals, mic_fs, room_fs=DEFAULT_ROOM_FS):
             resampled_signals[i,:] = signals[i]
         else:
             n_new_signal = int(n_signal*resampling_rate)
-            resampled_signals[i,:n_new_signal] = resample(
-                                                    signals[i], n_new_signal)
+            downsampled_signal = resample(signals[i], n_new_signal)
+            upsampled_signal = resample(downsampled_signal, n_signal)
+
+            resampled_signals[i] = upsampled_signal
 
     return resampled_signals
+

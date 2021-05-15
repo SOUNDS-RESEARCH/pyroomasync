@@ -16,7 +16,7 @@ def test_simulate():
     connected_room = ConnectedShoeBox(room_dim)
     connected_room.add_source(source_location, signal=input_signal)
     connected_room.add_microphone_array(mic_locations, latency=latency)
-    connected_room.simulate_network()
+    connected_room.simulate()
 
     room = ShoeBox(room_dim, fs=fs)
     room.add_source(source_location, signal=input_signal)
