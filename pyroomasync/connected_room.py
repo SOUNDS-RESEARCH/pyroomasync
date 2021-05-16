@@ -33,7 +33,7 @@ class ConnectedShoeBox(pra.ShoeBox):
         self.connected_mic_array.add_microphone_array(n_mics, fs, latency)
 
     def simulate(self, **kwargs):
-        self.simulate(**kwargs)
+        super().simulate(**kwargs)
         signals = self.mic_array.signals
 
         return self.connected_mic_array.simulate(signals)

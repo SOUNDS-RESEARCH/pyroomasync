@@ -3,10 +3,11 @@ from pyroomasync.settings import DEFAULT_ROOM_FS
 
 
 class AsynchronousMicrophoneNetwork:
-    def __init__(self):
+    def __init__(self, base_fs=DEFAULT_ROOM_FS):
         self.fs_array = []
         self.latency_array = []
         self.signals = None
+        self.base_fs = base_fs
 
     def add_microphone(self, fs, latency=0):
         self.fs_array.append(fs)
@@ -22,13 +23,13 @@ class AsynchronousMicrophoneNetwork:
         self.signals = simulate_latency(
             room_simulation_result,
             self.latency_array,
-            self.room_fs
+            self.base_fs
         )
 
         self.signals = simulate_sampling_rates(
             self.signals,
             self.fs_array,
-            self.room_fs
+            self.base_fs
         )
 
         return self.signals
