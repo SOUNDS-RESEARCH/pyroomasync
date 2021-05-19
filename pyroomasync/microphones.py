@@ -4,11 +4,6 @@ from pyroomasync.simulator import simulate
 
 class Microphones:
     def __init__(self, base_fs=DEFAULT_ROOM_FS):
-        self.id_array = []
-        self.fs_array = []
-        self.latency_array = []
-        self.loc_array = []
-
         self.mic_array = []
         self.base_fs = base_fs
 
@@ -48,7 +43,7 @@ class Microphones:
         return [m.fs for m in self.mic_array]
 
     def __len__(self):
-        return len(self.loc_array)
+        return len(self.mic_array)
 
 
 class Microphone:

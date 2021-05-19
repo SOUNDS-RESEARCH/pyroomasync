@@ -2,6 +2,7 @@ import numpy as np
 from pyroomacoustics import ShoeBox
 
 from pyroomasync.connected_room import ConnectedShoeBox
+from pyroomasync.simulator import simulate
 from experiments.common.create_signal import create_signal
 
 
@@ -14,15 +15,14 @@ def test_simulate():
     mic_locations = [[2,2], [3, 3]]
 
     connected_room = ConnectedShoeBox(room_dim)
-    connected_room.add_source(source_location, signal=input_signal)
+    connected_room.add_source(source_location, input_signal)
     connected_room.add_microphone_array(mic_locations, latency=latency)
-    connected_room.simulate()
+    connected_room_results = simulate(connected_room)
 
     room = ShoeBox(room_dim, fs=fs)
     room.add_source(source_location, signal=input_signal)
     room.add_microphone_array(mic_locations)
     room.simulate()
-    connected_room_results = connected_room.microphones.signals
     room_results = room.mic_array.signals
     
     # Assert delayed signals will start being received after a delay

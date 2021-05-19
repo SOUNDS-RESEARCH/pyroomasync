@@ -13,15 +13,6 @@ def simulate(room):
     return network_simulation_results
 
 
-def acoustic_simulation(room):
-    if room.rirs.is_empty():
-        # no RIRs provided: simulate using pyroomacoustics 
-        room.pyroomacoustics_engine.simulate()
-        return room.pyroomacoustics_engine.mic_array.signals
-    else:
-        return convolve(room.rirs, room.microphones, room.sources)
-
-
 def network_simulation(microphones, acoustic_simulation_result):
 
     signals = _simulate_latency(
@@ -37,6 +28,15 @@ def network_simulation(microphones, acoustic_simulation_result):
     )
 
     return signals
+
+
+def acoustic_simulation(room):
+    if room.rirs.is_empty():
+        # no RIRs provided: simulate using pyroomacoustics 
+        room.pyroomacoustics_engine.simulate()
+        return room.pyroomacoustics_engine.mic_array.signals
+    else:
+        return convolve(room.rirs, room.microphones, room.sources)
 
 
 def _simulate_latency(signals, latencies, room_fs):

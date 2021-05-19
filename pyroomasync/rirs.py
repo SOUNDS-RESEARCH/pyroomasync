@@ -20,21 +20,21 @@ class Rirs:
 
 def convolve(rirs, microphones, sources):
     mic_signals = []
-    for mic in microphones:
+    for mic in microphones.mic_array:
         pre_mixed_signals = []
-        for source in sources: 
+        for source in sources.source_array:
             pre_mixed_signal = fftconvolve(
-                source.signal,
-                rirs(mic.id, source.id)
+                rirs(mic.id, source.id),
+                source.signal
             )
             pre_mixed_signals.append(
                 pre_mixed_signal
             )
-            mic_signals.append(
-                _mix_signals(pre_mixed_signal)
-            )
+        mic_signals.append(
+            _mix_signals(pre_mixed_signals)
+        )
 
-    return mic_signals
+    return _make_matrix(mic_signals)
     
 
 def _mix_signals(pre_mixed_signals):
@@ -45,6 +45,22 @@ def _mix_signals(pre_mixed_signals):
     mixed_signal = np.zeros(signal_max_len)
     
     for signal in pre_mixed_signals:
-        mixed_signal[0:len(signal)] = signal
+        mixed_signal[0:len(signal)] += signal
         
     return mixed_signal
+
+
+def _make_matrix(mic_signals):
+    n_mics = len(mic_signals)
+    signal_max_len = max(
+        [len(signal) for signal in mic_signals]
+    )
+
+    output_matrix = np.zeros((n_mics, signal_max_len))
+
+    for i, signal in enumerate(mic_signals):
+        output_matrix[i, 0:len(signal)] = signal
+
+    return output_matrix
+
+        
