@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from experiments.common.room_creator import from_experiment_config_json
+from experiments.room_creator import from_experiment_config_json
 from experiments.common.logger import SimulationLogger
 
 BASE_LOG_DIR = Path("logs/")
@@ -29,5 +29,3 @@ def run_experiment(config_file_path):
 if __name__ == "__main__":
     parser = parse_args()
     run_experiment(parser.config_file_path)
-    
-

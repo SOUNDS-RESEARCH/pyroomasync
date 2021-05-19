@@ -7,7 +7,7 @@ from experiments.common.create_signal import create_signal
 
 def test_simulate():
     latency = 0.1 # 100 ms
-    fs = 44100  # connected_room currently only supports this rate
+    fs = 44100
     input_signal = create_signal("low")
     room_dim = [4, 6]
     source_location = [1, 1]
@@ -22,8 +22,7 @@ def test_simulate():
     room.add_source(source_location, signal=input_signal)
     room.add_microphone_array(mic_locations)
     room.simulate()
-
-    connected_room_results = connected_room.connected_mic_array.signals
+    connected_room_results = connected_room.microphones.signals
     room_results = room.mic_array.signals
     
     # Assert delayed signals will start being received after a delay

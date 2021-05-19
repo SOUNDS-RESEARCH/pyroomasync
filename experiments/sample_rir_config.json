@@ -1,0 +1,38 @@
+{
+    "room":{
+        "dims":[4.47, 5.13, 3.18],
+        "rirs":[
+            {
+                "source_id": "fostex",
+                "microphone_id": "chromebook1",
+                "signal_file_path": "experiments/signals/ace/Chromebook_EE_lobby_1_RIR.wav"
+            },
+            {
+                "source_id": "fostex",
+                "microphone_id": "chromebook2",
+                "signal_file_path": "experiments/signals/ace/Chromebook_EE_lobby_1_RIR.wav"
+            }
+        ]
+    },
+    "sources":[
+        {
+            "id": "fostex",
+            "signal_file_path": "experiments/signals/vctk/p225_001.wav",
+            "source_location": [1.98, 0.61, 0]
+        }
+    ],
+    "microphones":[
+        {
+            "id": "chromebook1",
+            "location": [3.40, 2.10, 0.72],
+            "sr": 16001,
+            "latency": 0.1
+        },
+        {
+            "id": "chromebook2",
+            "location": [3.35, 3.41, 0.72],
+            "sr": 15999,
+            "latency": 0
+        }
+    ]
+}

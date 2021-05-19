@@ -1,5 +1,4 @@
 import json
-import librosa
 
 from pyroomasync.connected_room import ConnectedShoeBox
 
@@ -29,8 +28,7 @@ def _add_microphone(room, mic_config):
     )
 
 def _add_source(room, source_config):
-    signal = librosa.load(source_config["signal_file_path"], sr=room.fs)[0]
     room.add_source(
         source_config["location"],
-        signal
+        source_config["signal_file_path"]
     )

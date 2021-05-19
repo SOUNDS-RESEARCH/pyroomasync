@@ -1,4 +1,4 @@
-from experiments.common.room_creator import from_experiment_config_json
+from experiments.room_creator import from_experiment_config_json
 
 
 def test_from_experiment_config_json():
@@ -8,6 +8,6 @@ def test_from_experiment_config_json():
 
     assert connected_room.n_sources == 1
     assert connected_room.n_mics == 3
-    assert connected_room.connected_mic_array.fs_array == [16001, 15999, 32000]
-    assert connected_room.connected_mic_array.latency_array == [0, 0.01, 0.02]
+    assert connected_room.microphones.get_fs() == [16001, 15999, 32000]
+    assert connected_room.microphones.get_latencies() == [0, 0.01, 0.02]
 

@@ -55,7 +55,7 @@ class ConnectedMicArrayLogger(BaseLogger):
         super().__init__(output_dir, "mic_signals.png")
 
     def log(self, room):
-        mic_signals = room.connected_mic_array.signals
+        mic_signals = room.microphones.signals
         for i, mic_signal in enumerate(mic_signals):
             logger = MicSignalLogger(self.output_dir, i)
             logger.log(mic_signal, room.fs)

@@ -1,10 +1,45 @@
 import numpy as np
 from scipy.signal import resample
 
-from pyroomasync.settings import DEFAULT_ROOM_FS
+from pyroomasync.rirs import convolve
 
 
-def simulate_latency(signals, latencies, room_fs):
+def simulate(room):
+    acoustic_simulation_results = acoustic_simulation(room)
+    
+    network_simulation_results = network_simulation(
+        room.microphones, acoustic_simulation_results)
+
+    return network_simulation_results
+
+
+def acoustic_simulation(room):
+    if room.rirs.is_empty():
+        # no RIRs provided: simulate using pyroomacoustics 
+        room.pyroomacoustics_engine.simulate()
+        return room.pyroomacoustics_engine.mic_array.signals
+    else:
+        return convolve(room.rirs, room.microphones, room.sources)
+
+
+def network_simulation(microphones, acoustic_simulation_result):
+
+    signals = _simulate_latency(
+        acoustic_simulation_result,
+        microphones.get_latencies(),
+        microphones.base_fs
+    )
+
+    signals = _simulate_sampling_rates(
+        signals,
+        microphones.get_fs(),
+        microphones.base_fs
+    )
+
+    return signals
+
+
+def _simulate_latency(signals, latencies, room_fs):
     """Simulate adding a certain latency to each signal
 
     Args:
@@ -33,22 +68,14 @@ def simulate_latency(signals, latencies, room_fs):
     return output_signals
 
 
-def simulate_sampling_rates(signals, mic_fs, room_fs=DEFAULT_ROOM_FS):
-    """Samples signals to microphone signals and back to the original rate
-
-    Args:
-        signals ([type]): [description]
-        mic_fs ([type]): [description]
-        room_fs ([type], optional): [description]. Defaults to DEFAULT_ROOM_FS.
-
-    Returns:
-        [type]: [description]
+def _simulate_sampling_rates(signals, mic_fs, signals_fs):
+    """Samples signals to microphone signals and back to the signals_fs
     """
     n_signals, n_signal = signals.shape
     resampled_signals = np.zeros_like(signals)
 
     for i in range(n_signals):
-        resampling_rate = (mic_fs[i]/room_fs)
+        resampling_rate = (mic_fs[i]/signals_fs)
         if resampling_rate == 1:
             # Do not resample
             resampled_signals[i,:] = signals[i]
