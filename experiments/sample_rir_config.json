@@ -18,7 +18,7 @@
         {
             "id": "fostex",
             "signal_file_path": "experiments/signals/vctk/p225_001.wav",
-            "source_location": [1.98, 0.61, 0]
+            "location": [1.98, 0.61, 0]
         }
     ],
     "microphones":[

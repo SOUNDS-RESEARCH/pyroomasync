@@ -10,14 +10,12 @@ warnings.filterwarnings("ignore")
 
 class SimulationLogger:
     def __init__(self, output_dir):
-        self.room_logger = SceneLogger(output_dir)
-        self.rir_logger = RirLogger(output_dir)
+        self.room_logger = RoomLogger(output_dir)
         self.mic_array_logger = ConnectedMicArrayLogger(output_dir)
 
-    def log(self, room):
-        self.room_logger.log(room)
-        self.rir_logger.log(room)
-        self.mic_array_logger.log(room)
+    def log(self, room, mic_signals):
+        self.room_logger.log(room.pyroomacoustics_engine)
+        self.mic_array_logger.log(mic_signals, room.fs)
 
 
 class BaseLogger:
@@ -33,7 +31,7 @@ class BaseLogger:
         pass
 
 
-class SceneLogger(BaseLogger):
+class RoomLogger(BaseLogger):
     def __init__(self, output_dir):
         super().__init__(output_dir, "room.png")
 
@@ -54,19 +52,9 @@ class ConnectedMicArrayLogger(BaseLogger):
     def __init__(self, output_dir):
         super().__init__(output_dir, "mic_signals.png")
 
-    def log(self, room):
-        mic_signals = room.microphones.signals
+    def log(self, mic_signals, fs):
         for i, mic_signal in enumerate(mic_signals):
             logger = MicSignalLogger(self.output_dir, i)
-            logger.log(mic_signal, room.fs)
+            logger.log(mic_signal, fs)
 
         plot_microphone_signals(mic_signals, self.output_file_path)
-
-
-class RirLogger(BaseLogger):
-    def __init__(self, output_dir):
-        super().__init__(output_dir, "mic_rir.png")
-
-    def log(self, room):
-        room.plot_rir()
-        plt.savefig(self.output_file_path)
