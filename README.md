@@ -21,3 +21,9 @@ The speech samples used were taken from the [VCTK dataset](https://datashare.ed.
 ## Running experiments
 The `experiments` module contains experiments using Pyroomasync.
 You can run experiments by running the command `python -m experiments.run path_to_experiment_config_file`. For example, you can run `python -m experiments.runner experiments/sample_room_config.json`. The output files for the experiment will be saved in the `logs` folder
+
+## Acknowledgement
+This project has received funding from the European Union’s Horizon 2020 research and innovation
+programme under the Marie Skłodowska-Curie grant agreement No 956369
+
+![](docs/eu-emblem.jpg)

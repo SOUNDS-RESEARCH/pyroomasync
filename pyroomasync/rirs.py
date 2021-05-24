@@ -47,6 +47,8 @@ def _mix_signals(pre_mixed_signals):
     for signal in pre_mixed_signals:
         mixed_signal[0:len(signal)] += signal
         
+    mixed_signal = _normalize(mixed_signal)
+
     return mixed_signal
 
 
@@ -63,4 +65,11 @@ def _make_matrix(mic_signals):
 
     return output_matrix
 
-        
+
+def _normalize(signal):
+    """
+    normalize to be in a given range. The default is to normalize the maximum
+    amplitude to be one.
+    """
+
+    return signal / np.abs(signal).max()
