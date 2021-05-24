@@ -13,7 +13,9 @@ package to simulate such asynchronous microphone networks. It allows microphones
 
 
 ## Installation
-Install the required Python packages using `pip install -r requirements.txt`
+1. Build the package by running `python -m build`
+2. (Recommended) Create a virtual environment (`virtualenv venv`) and activate it
+3. Install the package pip install .\dist\pyroomasync_beta-0.0.1-py3-none-any.whl
 
 ## Speech samples 
 The speech samples used were taken from the [VCTK dataset](https://datashare.ed.ac.uk/handle/10283/2950) created at the University of Edinburgh.
