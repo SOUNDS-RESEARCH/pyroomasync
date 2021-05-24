@@ -21,8 +21,7 @@ package to simulate such asynchronous microphone networks. It allows microphones
 The speech samples used were taken from the [VCTK dataset](https://datashare.ed.ac.uk/handle/10283/2950) created at the University of Edinburgh.
 
 ## Running experiments
-The `experiments` module contains experiments using Pyroomasync.
-You can run experiments by running the command `python -m experiments.run path_to_experiment_config_file`. For example, you can run `python -m experiments.runner pyroomasync/experiments/sample_room_config.json`. The output files for the experiment will be saved in the `logs` folder
+After installing, you can run experiments by running the command `python -m pyroomasync path_to_experiment_config_file`. For example, you can run `python -m pyroomasync pyroomasync/experiments/sample_room_config.json`. The output files for the experiment will be saved in the `logs` folder
 
 ## Acknowledgements
 This project has received funding from the European Union’s Horizon 2020 research and innovation
