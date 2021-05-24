@@ -1,8 +1,8 @@
 import argparse
 from pathlib import Path
 
-from experiments.room_creator import from_experiment_config_json
-from experiments.common.logger import SimulationLogger
+from pyroomasync.experiments.room_creator import from_experiment_config_json
+from pyroomasync.experiments.common.logger import SimulationLogger
 from pyroomasync.simulator import simulate
 
 

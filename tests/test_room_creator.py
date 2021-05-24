@@ -1,5 +1,5 @@
 from pyroomasync.simulator import simulate
-from experiments.room_creator import from_experiment_config_json
+from pyroomasync.experiments.room_creator import from_experiment_config_json
 
 
 def test_from_experiment_config_json():
@@ -12,7 +12,7 @@ def test_from_experiment_config_json():
     assert connected_room.microphones.get_latencies() == [0, 0.01, 0.02]
 
     simulation_results = simulate(connected_room)
-    assert simulation_results.shape == (3, 92416)
+    assert simulation_results.shape == (3, 100580)
 
 
 def test_from_experiment_config_json_rir():
@@ -25,4 +25,4 @@ def test_from_experiment_config_json_rir():
     assert connected_room.microphones.get_latencies() == [0.1, 0]
 
     simulation_results = simulate(connected_room)
-    assert simulation_results.shape == (2, 137141)
+    assert simulation_results.shape == (2, 149268)

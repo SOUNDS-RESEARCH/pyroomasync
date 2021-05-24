@@ -3,12 +3,12 @@ from pyroomacoustics import ShoeBox
 
 from pyroomasync.connected_room import ConnectedShoeBox
 from pyroomasync.simulator import simulate
-from experiments.common.create_signal import create_signal
+from pyroomasync.experiments.common.create_signal import create_signal
 
 
 def test_simulate():
     latency = 0.1 # 100 ms
-    fs = 44100
+    fs = 48000
     input_signal = create_signal("low")
     room_dim = [4, 6]
     source_location = [1, 1]

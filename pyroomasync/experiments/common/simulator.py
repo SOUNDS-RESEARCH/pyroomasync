@@ -1,14 +1,14 @@
 import numpy as np
 import pyroomacoustics as pra
 
-from experiments.settings import (
+from pyroomasync.experiments.settings import (
     DISTANCE, SR, MIC_LOCATIONS,
     SOURCE_AZIMUTH_IN_RADIANS,
     ROOM_DIM, ROOM_NOISE_VARIANCE
 )
-from experiments.common.logger import SimulationLogger
-from experiments.common.create_signal import create_signal
-from experiments.common.math_utils import compute_source_location
+from pyroomasync.experiments.common.logger import SimulationLogger
+from pyroomasync.experiments.common.create_signal import create_signal
+from pyroomasync.experiments.common.math_utils import compute_source_location
 
 
 class Simulation:

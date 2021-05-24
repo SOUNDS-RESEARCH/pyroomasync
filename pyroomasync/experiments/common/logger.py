@@ -1,4 +1,4 @@
-from experiments.common.plotter import (
+from pyroomasync.experiments.common.plotter import (
     plot_room, plot_microphone_signals
 )
 import soundfile as sf
