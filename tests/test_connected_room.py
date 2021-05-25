@@ -3,13 +3,12 @@ from pyroomacoustics import ShoeBox
 
 from pyroomasync.connected_room import ConnectedShoeBox
 from pyroomasync.simulator import simulate
-from pyroomasync.experiments.common.create_signal import create_signal
 
 
 def test_simulate():
     latency = 0.1 # 100 ms
     fs = 48000
-    input_signal = create_signal("low")
+    input_signal = _sinusoid(10, 1, fs)
     room_dim = [4, 6]
     source_location = [1, 1]
     mic_locations = [[2,2], [3, 3]]
@@ -33,3 +32,7 @@ def test_simulate():
     assert np.array_equal(connected_room_results[:, n_delayed_samples:], room_results)
     assert not np.any(connected_room_results[:, :n_delayed_samples])
 
+
+def _sinusoid(freq_in_hz, duration, sr):
+    linear_samples = np.arange(duration*sr)
+    return np.sin(linear_samples*freq_in_hz)

@@ -1,9 +1,7 @@
 import os
 
 from pyroomasync.experiments.common.estimators import create_estimators, extract_features
-from pyroomasync.experiments.common.settings import BASE_OUTPUT_DIR
 from pyroomasync.experiments.common.create_signal import signal_types
-from pyroomasync.experiments.common.simulator import Simulation
 from pyroomasync.experiments.common.logger import ExperimentLogger
 
 

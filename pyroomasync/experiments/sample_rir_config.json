@@ -5,19 +5,19 @@
             {
                 "source_id": "fostex",
                 "microphone_id": "chromebook1",
-                "signal_file_path": "pyroomasync/experiments/signals/ace/Chromebook_EE_lobby_1_RIR.wav"
+                "signal_file_path": "examples/data/ace/Chromebook_EE_lobby_1_RIR.wav"
             },
             {
                 "source_id": "fostex",
                 "microphone_id": "chromebook2",
-                "signal_file_path": "pyroomasync/experiments/signals/ace/Chromebook_EE_lobby_2_RIR.wav"
+                "signal_file_path": "examples/data/ace/Chromebook_EE_lobby_2_RIR.wav"
             }
         ]
     },
     "sources":[
         {
             "id": "fostex",
-            "signal_file_path": "pyroomasync/experiments/signals/vctk/p225_001.wav",
+            "signal_file_path": "examples/data/vctk/p225_001.wav",
             "location": [1.98, 0.61, 0]
         }
     ],
