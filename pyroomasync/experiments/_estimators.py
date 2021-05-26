@@ -4,8 +4,8 @@ import pyroomacoustics as pra
 from scipy.signal import fftconvolve
 import os
 
-from pyroomasync.experiments.logger import EstimatorLogger
-from pyroomasync.experiments.settings import (
+from pyroomasync.utils.logger import EstimatorLogger
+from pyroomasync.utils.settings import (
     SOURCE_AZIMUTH_IN_RADIANS, FREQ_BINS, NFFT, MIC_LOCATIONS, SR, C
 )
 

@@ -2,8 +2,8 @@ import argparse
 import os
 from pathlib import Path
 
-from pyroomasync.experiments.room_creator import from_experiment_config_json
-from pyroomasync.experiments.common.logger import SimulationLogger
+from pyroomasync.utils.room_creator import from_experiment_config_json
+from pyroomasync.utils.logger import SimulationLogger
 from pyroomasync.simulator import simulate
 
 def parse_args():
@@ -21,7 +21,7 @@ def parse_args():
 
 
 def run_experiment(config_file_path, output_dir):
-    os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
     output_dir = Path(output_dir)
 
     experiment_name = Path(config_file_path).name.replace(".json", "")
@@ -36,4 +36,4 @@ def run_experiment(config_file_path, output_dir):
 
 if __name__ == "__main__":
     parser = parse_args()
-    run_experiment(parser.config_file_path)
+    run_experiment(parser.config_file_path, parser.output_dir)

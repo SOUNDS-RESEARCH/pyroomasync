@@ -1,5 +1,5 @@
 from pyroomasync.simulator import simulate
-from pyroomasync.experiments.room_creator import from_experiment_config_json
+from pyroomasync.utils.room_creator import from_experiment_config_json
 
 
 def test_from_experiment_config_json():

@@ -1,8 +1,8 @@
 import os
 
-from pyroomasync.experiments.common.estimators import create_estimators, extract_features
-from pyroomasync.experiments.common.create_signal import signal_types
-from pyroomasync.experiments.common.logger import ExperimentLogger
+from pyroomasync.utils.estimators import create_estimators, extract_features
+from pyroomasync.utils.create_signal import signal_types
+from pyroomasync.utils.logger import ExperimentLogger
 
 
 def compare_doa_estimators(input_signals, output_dir):
