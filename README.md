@@ -11,20 +11,27 @@ package to simulate such asynchronous microphone networks. It allows microphones
 * Different sampling rates (16.000Hz vs 32.000Hz, for example)
 * Imprecise sampling rates (16.000Hz vs 16.001Hz, for example)
 
+Another important addition is the option to use measured impulse responses instead of simulating them using the image source model.
 
 ## Installation
+
+### Option 1: Installing as a package (TODO: Add package to Pypi repository)
 1. Build the package by running `python -m build`
 2. (Recommended) Create a virtual environment (`virtualenv venv`) and activate it
 3. Install the package pip install .\dist\pyroomasync_beta-0.0.1-py3-none-any.whl
 
-## Speech samples 
-The speech samples used were taken from the [VCTK dataset](https://datashare.ed.ac.uk/handle/10283/2950) created at the University of Edinburgh.
+### Option 2: Installing requirements and running locally
+Install the requirements using `pip install -r requirements.txt`. You may want to do that in a virtual environment such as [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/command_ref.html)
 
 ## Running experiments
-After installing, you can run experiments by running the command `python -m pyroomasync path_to_experiment_config_file`. For example, you can run `python -m pyroomasync pyroomasync/experiments/sample_room_config.json`. The output files for the experiment will be saved in the `logs` folder
+After installing, you can run experiments by running the command `python -m pyroomasync path_to_experiment_config_file output_dir`. For example, you can run `python -m pyroomasync examples/sample_rir_config.json logs` to save the experiment results in the `logs` folder.
 
 ## Acknowledgements
 This project has received funding from the European Union’s Horizon 2020 research and innovation
 programme under the Marie Skłodowska-Curie grant agreement No 956369
 
 ![](docs/eu-emblem.jpg)
+
+Speech samples used were taken from the [VCTK dataset](https://datashare.ed.ac.uk/handle/10283/2950) created at the University of Edinburgh.
+
+Room impulse responses were taken from the [Ace Challenge Corpus](http://www.ee.ic.ac.uk/naylor/ACEweb/index.html)

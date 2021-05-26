@@ -3,7 +3,7 @@ import numpy as np
 import librosa, librosa.display
 
 
-def plot_microphone_signals(mic_signals, output_path):
+def plot_microphone_signals(mic_signals, output_path=None):
     plt.figure()
 
     n_mics = mic_signals.shape[0]
@@ -14,12 +14,20 @@ def plot_microphone_signals(mic_signals, output_path):
         plt.xlabel('Time [s]')
     #plt.colorbar(format="%+2.f dB")
     plt.tight_layout()
-    plt.savefig(output_path)
+
+    if output_path is not None:
+        plt.savefig(output_path)
+    else:
+        plt.show()
 
 
-def plot_room(room, output_path):
-    room.plot()
-    plt.savefig(output_path)
+def plot_room(room, output_path=None):
+    room.pyroomacoustics_engine.plot()
+
+    if output_path is not None:
+        plt.savefig(output_path)
+    else:
+        plt.show()
 
 
 def _plot_spectogram(signal):

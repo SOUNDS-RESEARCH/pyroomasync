@@ -1,0 +1,18 @@
+{
+    "room":{
+        "dims":[100, 100, 100]
+    },
+    "sources":[
+        {
+            "location":[20, 20, 1],
+            "signal_file_path": "examples/data/vctk/p225_001.wav"
+        }
+    ],
+    "microphones":[
+        {
+            "location": [80, 80, 1],
+            "sr": 16000,
+            "latency": 0
+        }
+    ]
+}

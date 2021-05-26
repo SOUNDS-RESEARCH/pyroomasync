@@ -4,14 +4,17 @@ import librosa
 from pyroomasync.connected_room import ConnectedShoeBox
 
 
-def from_experiment_config_json(file_path):
-    with open(file_path, "r") as f:
-        experiment_config = json.load(f)
+def from_experiment_config_json(file_path_or_json):
+
+    if type(file_path_or_json) == dict:
+        experiment_config = file_path_or_json
+    else:
+        with open(file_path_or_json, "r") as f:
+            experiment_config = json.load(f)
 
     # Infer sampling rates from files, set the room's SR as the lowest
     experiment_config = _add_sampling_rates(experiment_config)
-
-
+    
     room = ConnectedShoeBox(
         experiment_config["room"]["dims"],
         fs=experiment_config["room"]["fs"]

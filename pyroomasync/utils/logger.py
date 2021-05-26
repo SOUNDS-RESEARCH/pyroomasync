@@ -2,7 +2,6 @@ from pyroomasync.utils.visualization import (
     plot_room, plot_microphone_signals
 )
 import soundfile as sf
-import matplotlib.pyplot as plt
 import os
 import warnings
 warnings.filterwarnings("ignore")
@@ -10,11 +9,12 @@ warnings.filterwarnings("ignore")
 
 class SimulationLogger:
     def __init__(self, output_dir):
+        self.output_dir = output_dir
         self.room_logger = RoomLogger(output_dir)
         self.mic_array_logger = ConnectedMicArrayLogger(output_dir)
 
     def log(self, room, mic_signals):
-        self.room_logger.log(room.pyroomacoustics_engine)
+        self.room_logger.log(room)
         self.mic_array_logger.log(mic_signals, room.fs)
 
 
