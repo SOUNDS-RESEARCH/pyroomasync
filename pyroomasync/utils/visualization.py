@@ -3,11 +3,6 @@ import numpy as np
 import librosa, librosa.display
 
 
-def _plot_spectogram(signal):
-    D = librosa.stft(signal)  # STFT of y
-    S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
-    librosa.display.specshow(S_db, x_axis='time', y_axis='linear')
-
 def plot_microphone_signals(mic_signals, output_path):
     plt.figure()
 
@@ -20,13 +15,19 @@ def plot_microphone_signals(mic_signals, output_path):
     #plt.colorbar(format="%+2.f dB")
     plt.tight_layout()
     plt.savefig(output_path)
-    
-
-def plot_dirac(estimator, output_path, ground_truth):
-    estimator.polar_plt_dirac(azimuth_ref=np.array([ground_truth]))
-    plt.savefig(output_path)
 
 
 def plot_room(room, output_path):
     room.plot()
+    plt.savefig(output_path)
+
+
+def _plot_spectogram(signal):
+    D = librosa.stft(signal)  # STFT of y
+    S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
+    librosa.display.specshow(S_db, x_axis='time', y_axis='linear')
+
+    
+def plot_dirac(estimator, output_path, ground_truth):
+    estimator.polar_plt_dirac(azimuth_ref=np.array([ground_truth]))
     plt.savefig(output_path)

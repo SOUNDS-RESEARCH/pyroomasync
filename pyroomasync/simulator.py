@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.signal import resample
 
-from pyroomasync.rirs import convolve
+from pyroomasync.rirs import convolve, normalize
 
 
 def simulate(room):
@@ -34,7 +34,8 @@ def acoustic_simulation(room):
     if room.rirs.is_empty():
         # no RIRs provided: simulate using pyroomacoustics 
         room.pyroomacoustics_engine.simulate()
-        return room.pyroomacoustics_engine.mic_array.signals
+        signals = room.pyroomacoustics_engine.mic_array.signals
+        return normalize(signals)
     else:
         return convolve(room.rirs, room.microphones, room.sources)
 
