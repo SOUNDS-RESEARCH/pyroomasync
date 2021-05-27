@@ -15,7 +15,7 @@ Another important addition is the option to use measured impulse responses inste
 
 ## Installation
 
-### Option 1: Install as a package
+### Option 1: Install as a package [Waiting for publication]
 `pip install pyroomasync`
 
 ### Option 2: Install requirements and run from directory
@@ -25,7 +25,7 @@ Install the requirements using `pip install -r requirements.txt`. You may want t
 After installing, you can run experiments by running the command `python -m pyroomasync path_to_experiment_config_file output_dir`. For example, you can run `python -m pyroomasync examples/sample_rir_config.json logs` to save the experiment results in the `logs` folder.
 
 ## Examples
-The `examples` directory contains examples on running simulations using the command line interface, as well as a Notebook showing the programming interface. Please see the README file located in the directory for more information
+The `examples` directory contains examples on running simulations using the command line interface, as well as a Notebook showing the programming interface. Please see the README file located in the directory for more information.
 
 ## Acknowledgements
 This project has received funding from the European Union’s Horizon 2020 research and innovation
