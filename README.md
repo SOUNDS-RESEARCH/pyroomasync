@@ -15,12 +15,10 @@ Another important addition is the option to use measured impulse responses inste
 
 ## Installation
 
-### Option 1: Installing as a package (TODO: Add package to Pypi repository)
-1. Build the package by running `python -m build`
-2. (Recommended) Create a virtual environment (`virtualenv venv`) and activate it
-3. Install the package pip install .\dist\pyroomasync_beta-0.0.1-py3-none-any.whl
+### Option 1: Install as a package
+`pip install pyroomasync`
 
-### Option 2: Installing requirements and running locally
+### Option 2: Install requirements and run from directory
 Install the requirements using `pip install -r requirements.txt`. You may want to do that in a virtual environment such as [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/command_ref.html)
 
 ## Running experiments
