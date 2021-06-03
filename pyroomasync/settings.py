@@ -1,1 +1,2 @@
 DEFAULT_ROOM_FS = 48000
+SPEED_OF_SOUND = 343.0  # meters per second
