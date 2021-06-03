@@ -1,5 +1,4 @@
 from pyroomasync.settings import DEFAULT_ROOM_FS
-from pyroomasync.simulator import simulate
 
 
 class Microphones:

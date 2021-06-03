@@ -19,13 +19,20 @@ Another important addition is the option to use measured impulse responses inste
 `pip install pyroomasync`
 
 ### Option 2: Install requirements and run from directory
-Install the requirements using `pip install -r requirements.txt`. You may want to do that in a virtual environment such as [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/command_ref.html)
+1. Optional: Set up and activate a virtual environment such as [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/command_ref.html)
+2. Install the requirements using `pip install -r requirements.txt` (Linux and Mac) or `py -m pip install requirements.txt` (Windows)
 
-## Running experiments
-After installing, you can run experiments by running the command `python -m pyroomasync path_to_experiment_config_file output_dir`. For example, you can run `python -m pyroomasync examples/sample_rir_config.json logs` to save the experiment results in the `logs` folder.
+## Usage
+After installing, you can run experiments by running the command `python -m pyroomasync path/to/experiment_config/ output_dir` or `py -m pyroomasync path/to/experiment_config/ output_dir`
 
 ## Examples
-The `examples` directory contains examples on running simulations using the command line interface, as well as a Notebook showing the programming interface. Please see the README file located in the directory for more information.
+The `examples` directory contains examples on running simulations using the command line interface, as well as a Notebook showing the programming interface. Please see the README file located in that directory for more information.
+
+## Developement
+
+### Unit tests
+A part of this code is covered using unit tests. In order to run them, run `make pytest` or `pytest tests` (Linux or Mac) or `py -m pytest tests` (Windows).
+
 
 ## Acknowledgements
 This project has received funding from the European Union’s Horizon 2020 research and innovation
