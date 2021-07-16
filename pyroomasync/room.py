@@ -29,7 +29,7 @@ class ConnectedShoeBox:
         self.pyroomacoustics_engine.add_microphone(loc, fs=self.fs)
         self.n_mics += 1
 
-    def add_microphone_array(self, microphone_array, latency=0, id=None):
+    def add_microphone_array(self, microphone_array, delay=0, id=None):
         n_mics = len(microphone_array)
 
         if isinstance(microphone_array, MicrophoneArray):
@@ -37,7 +37,7 @@ class ConnectedShoeBox:
         else:
             fs = self.fs
 
-        self.microphones.add_array(microphone_array, fs, latency, id=id)
+        self.microphones.add_array(microphone_array, fs, delay, id=id)
         self.pyroomacoustics_engine.add_microphone_array(microphone_array)
         
         self.n_mics += n_mics
