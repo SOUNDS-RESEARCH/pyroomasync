@@ -35,4 +35,4 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: |
           python -m pip install --upgrade twine
-          python -m twine upload * --non-interactive
+          python -m twine upload * --non-interactive --verbose
