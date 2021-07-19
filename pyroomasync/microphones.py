@@ -25,12 +25,13 @@ class Microphones:
 
         n_microphones = len(loc_array)
         id_array = _parse_id(id, n_microphones, len(self))
-        latency_array = _parse_latency(latency, n_microphones)
+        latency_array = _parse_input_value(latency, n_microphones)
+        fs_array = _parse_input_value(fs, n_microphones)
 
         for i in range(n_microphones):
             self.add(
                 loc_array[i],
-                fs,
+                fs_array[i],
                 latency_array[i],
                 id_array[i]
             )
@@ -75,16 +76,16 @@ def _parse_id(id, n_mics_to_add, current_n_mics_in_network):
     return id
 
 
-def _parse_latency(latency, n_mics):
-    if type(latency) in (int, float):
-        latency = n_mics*[latency]
-    elif type(latency) == list:
-        n_latency = len(latency)
-        if n_latency != n_mics:
+def _parse_input_value(value, n_mics):
+    if type(value) in (int, float):
+        value = n_mics*[value]
+    elif type(value) == list:
+        n_value = len(value)
+        if n_value != n_mics:
             raise ValueError(
                 (
-                    "The latency array is of size {}. Please provide an array of "
+                    "The array is of size {}. Please provide an array of "
                     "the same size as the microphone positions array ({})"
-                ).format(n_latency, n_mics)
+                ).format(n_value, n_mics)
             )
-    return latency
+    return value

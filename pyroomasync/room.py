@@ -1,6 +1,7 @@
+from typing import List
 import librosa
+import numpy as np
 from pyroomacoustics import ShoeBox
-from pyroomacoustics.beamforming import MicrophoneArray
 
 from pyroomasync.microphones import Microphones
 from pyroomasync.sources import Sources
@@ -21,7 +22,7 @@ class ConnectedShoeBox:
         self.n_mics = 0
         self.n_sources = 0
 
-    def add_microphone(self, loc, fs=None, latency=0, id=None):
+    def add_microphone(self, loc: List, fs=None, latency=0, id=None):
         if fs is None:
             fs = self.fs
         self.microphones.add(loc, fs, latency, id)
@@ -29,15 +30,17 @@ class ConnectedShoeBox:
         self.pyroomacoustics_engine.add_microphone(loc, fs=self.fs)
         self.n_mics += 1
 
-    def add_microphone_array(self, microphone_array, delay=0, id=None):
+    def add_microphone_array(self, microphone_array: List[List],
+                                            delay=0, fs=None, id=None):
         n_mics = len(microphone_array)
 
-        if isinstance(microphone_array, MicrophoneArray):
-            fs = microphone_array.fs
-        else:
+        if fs is None:
             fs = self.fs
 
         self.microphones.add_array(microphone_array, fs, delay, id=id)
+
+        # In pyroomacoustics, mic coordinates are column vectors 
+        microphone_array = np.array(microphone_array).T
         self.pyroomacoustics_engine.add_microphone_array(microphone_array)
         
         self.n_mics += n_mics
