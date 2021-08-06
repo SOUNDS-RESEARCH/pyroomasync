@@ -12,7 +12,7 @@
         {
             "location": [80, 80, 1],
             "sr": 16000,
-            "latency": 0
+            "delay": 0
         }
     ]
 }

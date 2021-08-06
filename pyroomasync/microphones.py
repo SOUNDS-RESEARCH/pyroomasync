@@ -9,7 +9,7 @@ class Microphones:
         # variable storing simulation results
         self.signals = None
 
-    def add(self, loc, fs=None, latency=0, id=None):
+    def add(self, loc, fs=None, delay=0, id=None):
         if fs is None:
             fs = self.base_fs
         
@@ -18,26 +18,26 @@ class Microphones:
             id = str(len(self))
         
         self.mic_array.append(
-            Microphone(id, loc, fs, latency)
+            Microphone(id, loc, fs, delay)
         )
 
-    def add_array(self, loc_array, fs=None, latency=0, id=None):
+    def add_array(self, loc_array, fs=None, delay=0, id=None):
 
         n_microphones = len(loc_array)
         id_array = _parse_id(id, n_microphones, len(self))
-        latency_array = _parse_input_value(latency, n_microphones)
+        delay_array = _parse_input_value(delay, n_microphones)
         fs_array = _parse_input_value(fs, n_microphones)
 
         for i in range(n_microphones):
             self.add(
                 loc_array[i],
                 fs_array[i],
-                latency_array[i],
+                delay_array[i],
                 id_array[i]
             )
 
     def get_latencies(self):
-        return [m.latency for m in self.mic_array]
+        return [m.delay for m in self.mic_array]
 
     def get_fs(self):
         return [m.fs for m in self.mic_array]
@@ -47,11 +47,11 @@ class Microphones:
 
 
 class Microphone:
-    def __init__(self, id, loc, fs, latency):
+    def __init__(self, id, loc, fs, delay):
         self.id = id
         self.loc = loc
         self.fs = fs
-        self.latency = latency
+        self.delay = delay
 
 
 def _parse_id(id, n_mics_to_add, current_n_mics_in_network):

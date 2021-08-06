@@ -20,7 +20,7 @@ As no RIRs are provided in the config file, pyroomasync will simulate them using
 
 ## Example 2: Small room simulation with delayed microphones
 
-The file `small_room_delayed_microphones_simulation_example.json` defines a 3m³ room. It contains two microphones at positions (0.5, 0.5, 1) and (1.5, 1.5, 1) and a source at the middle, at (1, 1, 1). The second microphone has a latency of 100ms with respect to the first one.
+The file `small_room_delayed_microphones_simulation_example.json` defines a 3m³ room. It contains two microphones at positions (0.5, 0.5, 1) and (1.5, 1.5, 1) and a source at the middle, at (1, 1, 1). The second microphone has a delay of 100ms with respect to the first one.
 
 As no RIRs are provided in the config file, pyroomasync will simulate them using pyroomacoustics. As the room is small and microphones are close, there is not much reverberation in the resulting signals.
 

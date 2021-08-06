@@ -22,10 +22,10 @@ class ConnectedShoeBox:
         self.n_mics = 0
         self.n_sources = 0
 
-    def add_microphone(self, loc: List, fs=None, latency=0, id=None):
+    def add_microphone(self, loc: List, fs=None, delay=0, id=None):
         if fs is None:
             fs = self.fs
-        self.microphones.add(loc, fs, latency, id)
+        self.microphones.add(loc, fs, delay, id)
         
         self.pyroomacoustics_engine.add_microphone(loc, fs=self.fs)
         self.n_mics += 1

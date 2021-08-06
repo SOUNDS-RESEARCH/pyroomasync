@@ -34,7 +34,7 @@ def _add_microphones(room, mics_config):
         room.add_microphone(
             mic_config["location"],
             fs=mic_config["sr"],
-            latency=mic_config["latency"],
+            delay=mic_config["delay"],
             id=mic_config.get("id", None)
         )
 
