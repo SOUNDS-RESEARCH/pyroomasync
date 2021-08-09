@@ -12,7 +12,7 @@ from pyroomasync.settings import DEFAULT_ROOM_FS
 class ConnectedShoeBox:
     def __init__(self, dims, fs=DEFAULT_ROOM_FS, **kwargs):
         self.pyroomacoustics_engine = ShoeBox(
-            dims, fs=DEFAULT_ROOM_FS, **kwargs
+            dims, fs=fs, **kwargs
         )
 
         self.fs = fs
