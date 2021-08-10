@@ -15,6 +15,7 @@ class ConnectedShoeBox:
             dims, fs=fs, **kwargs
         )
 
+        self.dims = dims
         self.fs = fs
         self.microphones = Microphones(base_fs=fs)
         self.sources = Sources()
