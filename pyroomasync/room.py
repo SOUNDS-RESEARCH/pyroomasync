@@ -23,24 +23,25 @@ class ConnectedShoeBox:
         self.n_mics = 0
         self.n_sources = 0
 
-    def add_microphone(self, loc: List, fs=None, delay=0, id=None):
+
+    def add_microphone(self, loc: List, fs=None, delay=0, gain=1, id=None):
         if fs is None:
             fs = self.fs
-        self.microphones.add(loc, fs, delay, id)
+        self.microphones.add(loc, fs, delay, gain, id)
         
         self.pyroomacoustics_engine.add_microphone(loc, fs=self.fs)
         self.n_mics += 1
 
     def add_microphone_array(self, microphone_array: List[List],
-                                            delay=0, fs=None, id=None):
+                             delay=0, fs=None, gain=1, id=None):
         n_mics = len(microphone_array)
 
         if fs is None:
             fs = self.fs
 
-        self.microphones.add_array(microphone_array, fs, delay, id=id)
-
-        # In pyroomacoustics, mic coordinates are column vectors 
+        self.microphones.add_array(microphone_array, fs, delay, gain, id)
+        
+        # Pyroomacoustics use input microphone locations as (dim, n_mics)
         microphone_array = np.array(microphone_array).T
         self.pyroomacoustics_engine.add_microphone_array(microphone_array)
         

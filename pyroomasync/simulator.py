@@ -42,7 +42,7 @@ def network_simulation(microphones: Microphones,
 
     signals = _simulate_delay(
         recorded_signals,
-        microphones.get_latencies(),
+        microphones.get_delays(),
         microphones.base_fs
     )
 
@@ -82,6 +82,8 @@ def acoustic_simulation(room: ConnectedShoeBox, sampling_mode="downsample"):
         room.microphones.base_fs,
         mode=sampling_mode
     )
+
+    signals = _simulate_microphone_gains(signals, room.microphones.get_gains())
 
     return signals
 
@@ -139,3 +141,11 @@ def _simulate_sampling_rates(signals, mic_fs, signals_fs, mode="downsample"):
                 resampled_signals[i] = upsampled_signal
 
     return resampled_signals
+
+
+def _simulate_microphone_gains(signals, mic_gains):
+    if type(mic_gains) == list:
+        mic_gains = np.array(mic_gains)
+    
+    mic_gains = mic_gains.reshape(mic_gains.shape[0], 1)
+    return signals*mic_gains
