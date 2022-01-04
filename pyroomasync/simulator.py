@@ -6,7 +6,7 @@ from pyroomasync.room import ConnectedShoeBox
 from pyroomasync.microphones import Microphones
 
 
-def simulate(room: ConnectedShoeBox):
+def simulate(room: ConnectedShoeBox, **kwargs):
     """Simulate recordings on an asynchronous microphone network, firstly by propagating
        signals through the acoustic channel and later through the network channel.
        For more information on each channel simulation, please read the "network_simulation"
@@ -18,7 +18,7 @@ def simulate(room: ConnectedShoeBox):
     Returns:
         numpy.array: Matrix containing one matrix per 
     """
-    acoustic_simulation_results = acoustic_simulation(room)
+    acoustic_simulation_results = acoustic_simulation(room, **kwargs)
     
     network_simulation_results = network_simulation(
         room.microphones, acoustic_simulation_results)
@@ -49,7 +49,7 @@ def network_simulation(microphones: Microphones,
     return signals
 
 
-def acoustic_simulation(room: ConnectedShoeBox, sampling_mode="downsample"):
+def acoustic_simulation(room: ConnectedShoeBox, **kwargs):
     """Simulate propagation through acoustic channel.
        The first part of the simulation consists in convolving the signals
        from every source within a room with the room impulse responses for every (source, microphone pair), then summing
@@ -59,10 +59,7 @@ def acoustic_simulation(room: ConnectedShoeBox, sampling_mode="downsample"):
 
     Args:
         room (ConnectedShoeBox): Room containing microphones and sources
-        sampling_mode (str): "downsample" or "smoothen".
-                             Downsample will reduce the size of the signal,
-                             Smoothen will downsample and upsample the signal,
-                             resulting in a signal of the same size.
+        kwargs: Keyword arguments to be passed to pyroomacoustics
 
     Returns:
         np.array: Matrix containing one recording per microphone
@@ -70,7 +67,7 @@ def acoustic_simulation(room: ConnectedShoeBox, sampling_mode="downsample"):
 
     if room.rirs.is_empty():
         # no RIRs provided: simulate using pyroomacoustics 
-        room.pyroomacoustics_engine.simulate()
+        room.pyroomacoustics_engine.simulate(**kwargs)
         signals = room.pyroomacoustics_engine.mic_array.signals
         signals = normalize(signals)
     else:
@@ -80,7 +77,6 @@ def acoustic_simulation(room: ConnectedShoeBox, sampling_mode="downsample"):
         signals,
         room.microphones.get_fs(),
         room.microphones.base_fs,
-        mode=sampling_mode
     )
 
     signals = _simulate_microphone_gains(signals, room.microphones.get_gains())
@@ -117,7 +113,7 @@ def _simulate_delay(signals, latencies, room_fs):
     return output_signals
 
 
-def _simulate_sampling_rates(signals, mic_fs, signals_fs, mode="downsample"):
+def _simulate_sampling_rates(signals, mic_fs, signals_fs):
     """Samples signals to microphone signals and back to the signals_fs
     """
     n_signals, n_signal = signals.shape
@@ -132,13 +128,7 @@ def _simulate_sampling_rates(signals, mic_fs, signals_fs, mode="downsample"):
             n_new_signal = int(n_signal*resampling_rate)
             downsampled_signal = resample(signals[i], n_new_signal)
 
-            if mode == "downsample":
-                # Do not upsample: add smaller signal to beginning of output matrix
-                resampled_signals[i][:n_new_signal] = downsampled_signal
-            elif mode == "smoothen":
-                # Upsample after downsampling, making the simulation behave like a low pass
-                upsampled_signal = resample(downsampled_signal, n_signal)
-                resampled_signals[i] = upsampled_signal
+            resampled_signals[i][:n_new_signal] = downsampled_signal
 
     return resampled_signals
 

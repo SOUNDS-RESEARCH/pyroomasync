@@ -1,4 +1,6 @@
+import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 from pyroomasync.room import ConnectedShoeBox
 from pyroomasync.simulator import _simulate_sampling_rates, simulate
@@ -6,10 +8,7 @@ from pyroomasync.simulator import _simulate_sampling_rates, simulate
 
 def test_delay():
     fs = 48000
-    def sinusoid(freq_in_hz, duration, sr):
-        linear_samples = np.arange(duration*sr)
-        return np.sin(linear_samples*freq_in_hz)
-    input_signal = sinusoid(10, 1, fs)
+    input_signal = _sinusoid(10, 1, fs)
     room_dim = [4, 6]
     source_location = [1, 1]
     mic_locations = [[2,2], [3, 3]]
@@ -38,14 +37,37 @@ def test_delay():
     assert not np.any(room_1_results[:, :n_delayed_samples])
 
 
-def test_simulate_sampling_rates_downsample_mode():
+def test_simulate_sampling_rates():
     fs = 48000
     mic_fs = 32000
-    def sinusoid(freq_in_hz, duration, sr):
-        linear_samples = np.arange(duration*sr)
-        return np.sin(linear_samples*freq_in_hz)
-    input_signal = sinusoid(10, 1, fs)[np.newaxis]
+    input_signal = _sinusoid(10, 1, fs)[np.newaxis]
 
-    result = _simulate_sampling_rates(input_signal, [mic_fs], fs, mode="downsample")
+    result = _simulate_sampling_rates(input_signal, [mic_fs], fs)
     
     assert (result[0, 32000:] == 0).all()
+
+
+def test_simulate_with_snr():
+    fs = 16000
+    snr = 10
+
+    input_signal = _sinusoid(10, 1, fs)
+    room_dim = [4, 6]
+    source_location = [1, 1]
+    mic_locations = [[2,2], [3, 3]]
+
+    room = ConnectedShoeBox(room_dim)
+    room.add_source(source_location, input_signal)
+    room.add_microphone_array(mic_locations)
+    room_results = simulate(room, snr=0)
+    
+    fig, ax = plt.subplots()
+    ax.plot(room_results[0])
+    
+    os.makedirs("tests/temp/", exist_ok=True)
+    plt.savefig("tests/temp/snr.png")
+
+
+def _sinusoid(freq_in_hz, duration, sr):
+    linear_samples = np.arange(duration*sr)
+    return np.sin(2*np.pi*linear_samples*freq_in_hz/sr)

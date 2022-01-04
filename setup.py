@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
   name='pyroomasync',
-  version='0.0.24',
+  version='0.0.25',
   description='Simulate asyncronous microphone array recordings',
   long_description=long_description,
   long_description_content_type="text/markdown",
