@@ -1,139 +1,96 @@
 import numpy as np
-from scipy.signal import resample
+
+from librosa import resample
 
 from pyroomasync.rirs import convolve, normalize
 from pyroomasync.room import ConnectedShoeBox
-from pyroomasync.microphones import Microphones
+from pyroomasync.delay import add_delays
 
 
 def simulate(room: ConnectedShoeBox, **kwargs):
-    """Simulate recordings on an asynchronous microphone network, firstly by propagating
-       signals through the acoustic channel and later through the network channel.
-       For more information on each channel simulation, please read the "network_simulation"
-       and "acoustic_simulation" functions.
+    """Simulate recordings of an asynchronous microphone network embedded within a room.
+       
+
+       Input signals are put through an acoustic channel, where they are convolved with 
+       room impulse responses pertaining to every microphone.
+       The signals at every microphone are then summed together to generate the 
+       simulated recorded signal at each microphone.
+       1. To simulate sampling rate offsets between microphones, sinc interpolation
+       is applied to every recording.
+       2. To simulate delays between the microphones,
+       which may be caused by clock offsets or network latency, a sinc filter is applied to
+       every resampled signal.
+       3. To simulate level differences,
+       the resulting signals are multipliedby their respective gain values.
 
     Args:
         room (ConnectedShoeBox): Room containing asynchronous microphones and sources
 
     Returns:
-        numpy.array: Matrix containing one matrix per 
-    """
-    acoustic_simulation_results = acoustic_simulation(room, **kwargs)
-    
-    network_simulation_results = network_simulation(
-        room.microphones, acoustic_simulation_results)
-
-    return network_simulation_results
-
-
-def network_simulation(microphones: Microphones,
-                       recorded_signals: np.array):
-    """Simulate propagation through the network channel.
-    The simulation consists in zero padding the beginning of each recorded signal
-    according to its microphone delay.
-
-    Args:
-        microphones (Microphones): Object representing n microphones which recorded recorded_signals 
-        recorded_signals (np.array): Matrix where every row is a signal recorded by one microphone in Microphones 
-
-    Returns:
-        np.array: recorded_signals with a respective added delay at the beginning.
-    """
-
-    signals = _simulate_delay(
-        recorded_signals,
-        microphones.get_delays(),
-        microphones.base_fs
-    )
-
-    return signals
-
-
-def acoustic_simulation(room: ConnectedShoeBox, **kwargs):
-    """Simulate propagation through acoustic channel.
-       The first part of the simulation consists in convolving the signals
-       from every source within a room with the room impulse responses for every (source, microphone pair), then summing
-       all resulting signals at each microphone.
-       A later step consists in downsampling the recorded signals with respect to its
-       respective microphone sampling rate.
-
-    Args:
-        room (ConnectedShoeBox): Room containing microphones and sources
-        kwargs: Keyword arguments to be passed to pyroomacoustics
-
-    Returns:
-        np.array: Matrix containing one recording per microphone
+        numpy.array: Matrix containing one row per microphone signal
     """
 
     if room.rirs.is_empty():
         # no RIRs provided: simulate using pyroomacoustics 
         room.pyroomacoustics_engine.simulate(**kwargs)
         signals = room.pyroomacoustics_engine.mic_array.signals
-        signals = normalize(signals)
+        acoustic_signals = normalize(signals)
     else:
-        signals = convolve(room.rirs, room.microphones, room.sources)
+        acoustic_signals = convolve(room.rirs, room.microphones, room.sources)
     
-    signals = _simulate_sampling_rates(
-        signals,
-        room.microphones.get_fs(),
-        room.microphones.base_fs,
-    )
 
-    signals = _simulate_microphone_gains(signals, room.microphones.get_gains())
+    resampled_signals = resample_signals(
+                            acoustic_signals,
+                            room.microphones.base_fs,
+                            room.microphones.get_fs(),
+                        )
 
-    return signals
+    deleveled_signals = simulate_microphone_gains(
+                            resampled_signals,
+                            room.microphones.get_gains()
+                        )
+
+    delayed_signals = add_delays(
+                        deleveled_signals,
+                        room.microphones.get_fs(),
+                        room.microphones.get_delays()
+                      )
+
+    return delayed_signals
 
 
-def _simulate_delay(signals, latencies, room_fs):
-    """Simulate adding a certain delay to each signal
+def resample_signals(signals: np.array, original_fs: int, target_fs: np.array):
+    """Resample a matrix of signals to their own target signals
 
     Args:
-        signals (np.array): Matrix containing one signal per row
-        latencies (np.array): Array of size equal to the number of signals, where every 
-                              element corresponds to the delay of that signal in seconds
-        room_fs (int): Sampling frequency of the matrix
+        signals (np.array): Matrix with one row per signal
+        original_fs (int): Original sampling rate of signals
+        target_fs (list or np.array): Target sampling rate for every row
 
     Returns:
-        (np.array): Array where every signal is delayed by its corresponding delay
+        np.array: Matrix where every signal is resampled to a specific rate
     """
-
-    n_signals, n_signal = signals.shape
-    mic_delayed_samples = room_fs*np.array(latencies)
-    max_delayed_samples = int(mic_delayed_samples.max()) 
-    n_output_signal = n_signal + max_delayed_samples
-    output_signals = np.zeros(
-        (n_signals, n_output_signal)
-    )
-
-    for i in range(n_signals):
-        n_delayed_samples = int(mic_delayed_samples[i])
-        n_end_signal = n_output_signal - (max_delayed_samples - n_delayed_samples)
-        output_signals[i, n_delayed_samples:n_end_signal] = signals[i]
-
-    return output_signals
-
-
-def _simulate_sampling_rates(signals, mic_fs, signals_fs):
-    """Samples signals to microphone signals and back to the signals_fs
-    """
-    n_signals, n_signal = signals.shape
+    n_signals = signals.shape[0]
     resampled_signals = np.zeros_like(signals)
 
+    target_fs = np.array(target_fs)
+    if (target_fs > original_fs).any():
+        raise ValueError("Resampling only supported for smaller rates than the original")
+
     for i in range(n_signals):
-        resampling_rate = (mic_fs[i]/signals_fs)
-        if resampling_rate == 1:
-            # Do not resample
+        if target_fs[i] == original_fs:
             resampled_signals[i,:] = signals[i]
         else:
-            n_new_signal = int(n_signal*resampling_rate)
-            downsampled_signal = resample(signals[i], n_new_signal)
-
+            
+            downsampled_signal = resample(signals[i],
+                                          original_fs, target_fs[i])
+            n_new_signal = downsampled_signal.shape[0]
             resampled_signals[i][:n_new_signal] = downsampled_signal
 
     return resampled_signals
 
 
-def _simulate_microphone_gains(signals, mic_gains):
+def simulate_microphone_gains(signals, mic_gains):
     if type(mic_gains) == list:
         mic_gains = np.array(mic_gains)
     

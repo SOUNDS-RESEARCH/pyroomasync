@@ -13,7 +13,7 @@ def test_from_experiment_config_json():
     assert room.microphones.get_gains() == [1, 1, 1]
 
     simulation_results = simulate(room)
-    assert simulation_results.shape == (3, 100580)
+    assert simulation_results.shape == (3, 100260)
 
 
 def test_from_experiment_config_json_rir():
@@ -26,4 +26,4 @@ def test_from_experiment_config_json_rir():
     assert room.microphones.get_delays() == [0.1, 0]
 
     simulation_results = simulate(room)
-    assert simulation_results.shape == (2, 149268)
+    assert simulation_results.shape == (2, 146068)
