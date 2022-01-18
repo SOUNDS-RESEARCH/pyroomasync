@@ -40,7 +40,7 @@ def plot_room_2d(room, ax=None):
     ax.set_xlim(0, room.dims[0])
     ax.set_ylim(0, room.dims[1])
     
-    mics = room.microphones.mic_array
+    mics = room.microphone_network.mic_array
     sources = room.sources.source_array
     
     mics_x = [mic.loc[0] for mic in mics]

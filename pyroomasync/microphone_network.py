@@ -1,7 +1,7 @@
 from pyroomasync.settings import DEFAULT_ROOM_FS
 
 
-class Microphones:
+class MicrophoneNetwork:
     def __init__(self, base_fs=DEFAULT_ROOM_FS):
         self.mic_array = []
         self.base_fs = base_fs

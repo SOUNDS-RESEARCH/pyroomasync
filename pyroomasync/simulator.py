@@ -36,24 +36,24 @@ def simulate(room: ConnectedShoeBox, **kwargs):
         signals = room.pyroomacoustics_engine.mic_array.signals
         acoustic_signals = normalize(signals)
     else:
-        acoustic_signals = convolve(room.rirs, room.microphones, room.sources)
+        acoustic_signals = convolve(room.rirs, room.microphone_network, room.sources)
     
 
     resampled_signals = resample_signals(
                             acoustic_signals,
-                            room.microphones.base_fs,
-                            room.microphones.get_fs(),
+                            room.microphone_network.base_fs,
+                            room.microphone_network.get_fs(),
                         )
 
     deleveled_signals = simulate_microphone_gains(
                             resampled_signals,
-                            room.microphones.get_gains()
+                            room.microphone_network.get_gains()
                         )
 
     delayed_signals = add_delays(
                         deleveled_signals,
-                        room.microphones.get_fs(),
-                        room.microphones.get_delays()
+                        room.microphone_network.get_fs(),
+                        room.microphone_network.get_delays()
                       )
 
     return delayed_signals

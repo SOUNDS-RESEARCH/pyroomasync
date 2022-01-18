@@ -14,5 +14,5 @@ def test_add_microphone_array():
     room = ConnectedShoeBox(room_dim)
     room.add_microphone_array(mic_locations, delays, sampling_rates)
 
-    assert len(room.microphones) == 2
+    assert len(room.microphone_network) == 2
     assert len(room.pyroomacoustics_engine.mic_array) == 2

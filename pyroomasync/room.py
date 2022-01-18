@@ -3,7 +3,7 @@ import librosa
 import numpy as np
 from pyroomacoustics import ShoeBox
 
-from pyroomasync.microphones import Microphones
+from pyroomasync.microphone_network import MicrophoneNetwork
 from pyroomasync.sources import Sources
 from pyroomasync.rirs import Rirs
 from pyroomasync.settings import DEFAULT_ROOM_FS
@@ -17,7 +17,7 @@ class ConnectedShoeBox:
 
         self.dims = dims
         self.fs = fs
-        self.microphones = Microphones(base_fs=fs)
+        self.microphone_network = MicrophoneNetwork(base_fs=fs)
         self.sources = Sources()
         self.rirs = Rirs()
         self.n_mics = 0
@@ -27,7 +27,7 @@ class ConnectedShoeBox:
     def add_microphone(self, loc: List, fs=None, delay=0, gain=1, id=None):
         if fs is None:
             fs = self.fs
-        self.microphones.add(loc, fs, delay, gain, id)
+        self.microphone_network.add(loc, fs, delay, gain, id)
         
         self.pyroomacoustics_engine.add_microphone(loc, fs=self.fs)
         self.n_mics += 1
@@ -39,7 +39,7 @@ class ConnectedShoeBox:
         if fs is None:
             fs = self.fs
 
-        self.microphones.add_array(microphone_array, fs, delay, gain, id)
+        self.microphone_network.add_array(microphone_array, fs, delay, gain, id)
         
         # Pyroomacoustics use input microphone locations as (dim, n_mics)
         microphone_array = np.array(microphone_array).T
