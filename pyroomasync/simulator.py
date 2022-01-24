@@ -71,23 +71,26 @@ def resample_signals(signals: np.array, original_fs: int, target_fs: np.array):
         np.array: Matrix where every signal is resampled to a specific rate
     """
     n_signals = signals.shape[0]
-    resampled_signals = np.zeros_like(signals)
+    resampled_signals = [] #np.zeros_like(signals)
 
     target_fs = np.array(target_fs)
-    if (target_fs > original_fs).any():
-        raise ValueError("Resampling only supported for smaller rates than the original")
+    # if (target_fs > original_fs).any():
+    #     raise ValueError("Resampling only supported for smaller rates than the original")
 
     for i in range(n_signals):
         if target_fs[i] == original_fs:
-            resampled_signals[i,:] = signals[i]
-        else:
-            
+            resampled_signals.append(signals[i])#[i,:] = signals[i]
+        else:    
             downsampled_signal = resample(signals[i],
                                           original_fs, target_fs[i])
-            n_new_signal = downsampled_signal.shape[0]
-            resampled_signals[i][:n_new_signal] = downsampled_signal
+            #n_new_signal = downsampled_signal.shape[0]
+            resampled_signals.append(downsampled_signal)#[i][:n_new_signal] = downsampled_signal
 
-    return resampled_signals
+    n_max_signal = max([signal.shape[0] for signal in resampled_signals])
+    resampled_signals_matrix = np.zeros((len(resampled_signals), n_max_signal))
+    for i, signal in enumerate(resampled_signals):
+        resampled_signals_matrix[i, :signal.shape[0]] = signal
+    return resampled_signals_matrix
 
 
 def simulate_microphone_gains(signals, mic_gains):

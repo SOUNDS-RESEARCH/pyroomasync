@@ -1,4 +1,6 @@
+from turtle import color
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 import numpy as np
 import librosa, librosa.display
 
@@ -30,29 +32,63 @@ def plot_room(room, output_path=None):
         plt.show()
 
 
+def plot_room_2d(room, output_path=None):
+    fig, axs = plt.subplots(nrows=2, figsize=(5, 7))
 
+    _plot_room_2d(room, axs[0])
+    _plot_room_2d(room, axs[1], mode="xz")
 
-def plot_room_2d(room, ax=None):
+    plt.tight_layout()
+    if output_path is not None:
+        plt.savefig(output_path)
+
+def _plot_room_2d(room, ax=None, output_path=None, mode="xy"):
+    margin = 0.25 # Add a 0.25m margin to plot the room rectangle
 
     if ax is None:
-        ax = plt.gca()
-        
-    ax.set_xlim(0, room.dims[0])
-    ax.set_ylim(0, room.dims[1])
+        _, ax = plt.subplots()
+
+    if mode == "xy":
+        idxs = [0, 1]
+        labels = ["width", "length"]
+    elif mode == "xz":
+        idxs = [0, 2]
+        labels = ["width", "height"]
+
+    ax.set_xlim(-margin, room.dims[idxs[0]] + margin)
+    ax.set_ylim(-margin, room.dims[idxs[1]] + margin)
     
     mics = room.microphone_network.mic_array
     sources = room.sources.source_array
     
-    mics_x = [mic.loc[0] for mic in mics]
-    mics_y = [mic.loc[1] for mic in mics]
-    sources_x = [source.loc[0] for source in sources]
-    sources_y = [source.loc[1] for source in sources]
+    mics_x = [mic.loc[idxs[0]] for mic in mics]
+    mics_y = [mic.loc[idxs[1]] for mic in mics]
+    sources_x = [source.loc[idxs[0]] for source in sources]
+    sources_y = [source.loc[idxs[1]] for source in sources]
     
-    ax.scatter(mics_x, mics_y, marker="^", label="microphones")
-    ax.scatter(sources_x, sources_y, marker="o", label="sources")
+    # Draw room boundaries as a rectangle
+    ax.add_patch(
+        patches.Rectangle(
+            (0, 0),
+            room.dims[0],
+            room.dims[1],
+            color="g",
+            fill=False,
+            linewidth=3
+    ))
+    ax.scatter(mics_x, mics_y, marker="o", label="microphones")
+    ax.scatter(sources_x, sources_y, marker="x", label="sources")
+
+    ax.set_aspect("equal")
+    ax.set_xlabel(f"Room {labels[0]} (m)")
+    ax.set_ylabel(f"Room {labels[1]} (m)")
+
     ax.legend()
     ax.grid()
     
+    if output_path is not None:
+        plt.savefig(output_path)
+
     return ax
 
 

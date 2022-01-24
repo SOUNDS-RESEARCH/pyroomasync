@@ -11,17 +11,17 @@
     "microphones":[
         {
             "location": [1, 1],
-            "sr": 16001,
+            "fs_offset": -1,
             "delay": 0
         },
         {
             "location": [2, 2],
-            "sr": 15999,
+            "fs_offset": 1,
             "delay": 0.01
         },
         {
             "location": [3, 3],
-            "sr": 32000,
+            "fs_offset": 0,
             "delay": 0.02
         }
     ]

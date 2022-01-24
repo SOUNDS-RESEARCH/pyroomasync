@@ -1,10 +1,13 @@
-from pyroomasync.utils.visualization import (
-    plot_room, plot_microphone_signals
-)
 import soundfile as sf
 import os
 import warnings
 warnings.filterwarnings("ignore")
+
+from pathlib import Path
+
+from pyroomasync.utils.visualization import (
+    plot_room, plot_microphone_signals, plot_room_2d
+)
 
 
 class SimulationLogger:
@@ -15,12 +18,12 @@ class SimulationLogger:
 
     def log(self, room, mic_signals):
         self.room_logger.log(room)
-        self.mic_array_logger.log(mic_signals, room.fs)
+        self.mic_array_logger.log(mic_signals, room.base_fs)
 
 
 class BaseLogger:
     def __init__(self, output_dir, file_name=""):
-        self.output_dir = output_dir
+        self.output_dir = Path(output_dir)
 
         if file_name:
             self.output_file_path = os.path.join(output_dir, file_name)
@@ -33,10 +36,11 @@ class BaseLogger:
 
 class RoomLogger(BaseLogger):
     def __init__(self, output_dir):
-        super().__init__(output_dir, "room.png")
+        super().__init__(output_dir, "room_3d.png")
 
     def log(self, room):
         plot_room(room, self.output_file_path)
+        plot_room_2d(room, output_path=self.output_dir/"room_2d.png")
 
 
 class MicSignalLogger(BaseLogger):

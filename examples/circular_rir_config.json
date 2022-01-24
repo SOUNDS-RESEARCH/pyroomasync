@@ -1,0 +1,27 @@
+{
+    "room":{
+        "dims":[5, 3, 3]
+    },
+    "sources":[
+        {
+            "location": [1, 2, 1],
+            "signal_file_path": "examples/data/vctk/p225_001.wav"
+        }
+    ],
+    "microphones":[
+        {
+            "type": "circular",
+            "location": [2, 1, 2.5],
+            "radius": 0.15,
+            "n_microphones": 8,
+            "delay": 0.001,
+            "sr_offset": 0.1
+        },
+        {
+            "type": "circular",
+            "location": [3, 1, 2.5],
+            "radius": 0.15,
+            "n_microphones": 8
+        }
+    ]
+}

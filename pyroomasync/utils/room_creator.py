@@ -29,14 +29,28 @@ def from_experiment_config_json(file_path_or_json):
     return room
 
 
-def _add_microphones(room, mics_config):
+def _add_microphones(room: ConnectedShoeBox, mics_config):
     for mic_config in mics_config:
-        room.add_microphone(
-            mic_config["location"],
-            fs=mic_config["sr"],
-            delay=mic_config["delay"],
-            id=mic_config.get("id", None)
-        )
+        if "type" in mic_config:
+            if mic_config["type"] == "circular":
+                room.add_circular_microphone_array(
+                    mic_config["location"],
+                    mic_config["n_microphones"],
+                    mic_config["radius"],
+                    fs_offset=mic_config.get("fs_offset", 0),
+                    delay=mic_config.get("delay", 0),
+                    gain=mic_config.get("gain", 1),
+                    id=mic_config.get("id", None)
+                )
+        else:
+            # Add single microphone
+            room.add_microphone(
+                mic_config["location"],
+                fs_offset=mic_config.get("fs_offset", 0),
+                delay=mic_config.get("delay", 0),
+                gain=mic_config.get("gain", 1),
+                id=mic_config.get("id", None)
+            )
 
 
 def _add_sources(room, sources_config):
@@ -80,7 +94,6 @@ def _add_sampling_rates(experiment_config):
         _add_fs(experiment_config["room"]["rirs"])
     
     _add_fs(experiment_config["sources"])
-   
 
     experiment_config["room"]["fs"] = min(fs_array)
 

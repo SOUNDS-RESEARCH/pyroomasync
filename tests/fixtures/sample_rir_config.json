@@ -25,13 +25,13 @@
         {
             "id": "chromebook1",
             "location": [3.40, 2.10, 0.72],
-            "sr": 16001,
+            "fs_offset": -1,
             "delay": 0.1
         },
         {
             "id": "chromebook2",
             "location": [3.35, 3.41, 0.72],
-            "sr": 15999,
+            "fs_offset": 1,
             "delay": 0
         }
     ]

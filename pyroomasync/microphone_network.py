@@ -1,3 +1,5 @@
+from pyroomacoustics.beamforming import circular_microphone_array_xyplane
+
 from pyroomasync.settings import DEFAULT_ROOM_FS
 
 

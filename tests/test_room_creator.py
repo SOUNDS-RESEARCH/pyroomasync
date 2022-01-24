@@ -8,12 +8,12 @@ def test_from_experiment_config_json():
     
     assert room.n_sources == 1
     assert room.n_mics == 3
-    assert room.microphone_network.get_fs() == [16001, 15999, 32000]
+    assert room.microphone_network.get_fs() == [48001, 47999, 48000]
     assert room.microphone_network.get_delays() == [0, 0.01, 0.02]
     assert room.microphone_network.get_gains() == [1, 1, 1]
 
     simulation_results = simulate(room)
-    assert simulation_results.shape == (3, 100260)
+    assert simulation_results.shape == (3, 100583)
 
 
 def test_from_experiment_config_json_rir():
@@ -22,8 +22,8 @@ def test_from_experiment_config_json_rir():
 
     assert room.n_sources == 1
     assert room.n_mics == 2
-    assert room.microphone_network.get_fs() == [16001, 15999]
+    assert room.microphone_network.get_fs() == [48001, 47999]
     assert room.microphone_network.get_delays() == [0.1, 0]
 
     simulation_results = simulate(room)
-    assert simulation_results.shape == (2, 146068)
+    assert simulation_results.shape == (2, 149272)
