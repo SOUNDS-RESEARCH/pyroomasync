@@ -1,8 +1,9 @@
 from typing import List
 import librosa
 import numpy as np
+import pyroomacoustics as pra
+
 from pyroomacoustics import ShoeBox, circular_2D_array
-from pyroomacoustics.beamforming import circular_microphone_array_xyplane
 
 from pyroomasync.microphone_network import MicrophoneNetwork
 from pyroomasync.sources import Sources
@@ -11,7 +12,14 @@ from pyroomasync.settings import DEFAULT_ROOM_FS
 
 
 class ConnectedShoeBox:
-    def __init__(self, dims, fs=DEFAULT_ROOM_FS, **kwargs):
+    def __init__(self, dims, fs=DEFAULT_ROOM_FS, rt60=None, **kwargs):
+        if rt60:
+            e_absorption, max_order = pra.inverse_sabine(rt60, dims)
+            materials=pra.Material(e_absorption)
+            kwargs.update({
+                "materials": materials, "max_order":max_order
+            })
+        
         self.pyroomacoustics_engine = ShoeBox(
             dims, fs=fs, **kwargs
         )

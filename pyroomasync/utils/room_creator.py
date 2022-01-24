@@ -17,7 +17,8 @@ def from_experiment_config_json(file_path_or_json):
     
     room = ConnectedShoeBox(
         experiment_config["room"]["dims"],
-        fs=experiment_config["room"]["fs"]
+        fs=experiment_config["room"]["fs"],
+        rt60=experiment_config["room"].get("rt60", None)
     )
 
     if "rirs" in experiment_config["room"].keys():
