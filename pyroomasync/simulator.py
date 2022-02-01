@@ -10,7 +10,6 @@ from pyroomasync.delay import add_delays
 def simulate(room: ConnectedShoeBox, **kwargs):
     """Simulate recordings of an asynchronous microphone network embedded within a room.
        
-
        Input signals are put through an acoustic channel, where they are convolved with 
        room impulse responses pertaining to every microphone.
        The signals at every microphone are then summed together to generate the 
@@ -59,6 +58,38 @@ def simulate(room: ConnectedShoeBox, **kwargs):
     return delayed_signals
 
 
+def simulate_network(signals: np.array, base_fs: float,
+                     target_fs=None,
+                     target_delays=None,
+                     target_gains=None):
+    """De-synchronize signals and apply different gains to them, simulating an
+       Asynchronous microphone network.
+
+    Args:
+        signals (np.array): Input signal matrix, where every row represents recorded microphones from one
+                            microphone channel. This matrix may be obtained, for example, by simulating signals
+                            using Pyroomacoustics.
+        base_fs (float): Sampling rate of the matrix
+        target_fs (np.array): Target sampling rate of each individual row of the matrix
+        target_delays (np.array): Target delay of each individual row of the matrix
+        target_gains (np.array): Target gains of each individual row of the matrix
+
+    Returns:
+        [type]: [description]
+    """
+
+    if target_fs is not None:
+        signals = resample_signals(signals, base_fs, target_fs)
+
+    if target_delays is not None:
+        delayed_signals = add_delays(signals, base_fs, target_delays)
+
+    if target_gains is not None:
+        deleveled_signals = simulate_microphone_gains(delayed_signals, target_gains)
+
+    return deleveled_signals
+
+
 def resample_signals(signals: np.array, original_fs: int, target_fs: np.array):
     """Resample a matrix of signals to their own target signals
 
@@ -71,20 +102,17 @@ def resample_signals(signals: np.array, original_fs: int, target_fs: np.array):
         np.array: Matrix where every signal is resampled to a specific rate
     """
     n_signals = signals.shape[0]
-    resampled_signals = [] #np.zeros_like(signals)
+    resampled_signals = []
 
     target_fs = np.array(target_fs)
-    # if (target_fs > original_fs).any():
-    #     raise ValueError("Resampling only supported for smaller rates than the original")
 
     for i in range(n_signals):
         if target_fs[i] == original_fs:
-            resampled_signals.append(signals[i])#[i,:] = signals[i]
+            resampled_signals.append(signals[i])
         else:    
             downsampled_signal = resample(signals[i],
                                           original_fs, target_fs[i])
-            #n_new_signal = downsampled_signal.shape[0]
-            resampled_signals.append(downsampled_signal)#[i][:n_new_signal] = downsampled_signal
+            resampled_signals.append(downsampled_signal)
 
     n_max_signal = max([signal.shape[0] for signal in resampled_signals])
     resampled_signals_matrix = np.zeros((len(resampled_signals), n_max_signal))

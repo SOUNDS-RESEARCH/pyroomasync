@@ -2,9 +2,14 @@ import numpy as np
 
 from math import floor
 
+from pyroomasync.settings import (
+    DELAY_FILTER_LENGTH, DELAY_FILTER_DEFAULT_WINDOW
+)
+
 
 def add_delays(signals, signals_fs, delays_in_seconds,
-               filter_length=21, window="hamming"):
+               filter_length=DELAY_FILTER_LENGTH,
+               window=DELAY_FILTER_DEFAULT_WINDOW):
     """Simulate adding a certain delay to each signal. For a complete discussion on fractional delays, see:
         * https://tomroelandts.com/articles/how-to-create-a-fractional-delay-filter
         * https://pysdr.org/content/sync.html
@@ -39,7 +44,9 @@ def add_delays(signals, signals_fs, delays_in_seconds,
     return delayed_signals_matrix
 
 
-def add_delay(signal, delay_in_samples, filter_length=21, window="hamming"):
+def add_delay(signal, delay_in_samples,
+              filter_length=DELAY_FILTER_LENGTH,
+              window=DELAY_FILTER_DEFAULT_WINDOW):
     integer_delay = floor(delay_in_samples)
     fractional_delay = delay_in_samples - integer_delay
 
@@ -57,7 +64,8 @@ def add_delay(signal, delay_in_samples, filter_length=21, window="hamming"):
     return signal
 
 
-def create_sinc_filter(filter_length: int, delay: float, window="hamming"):
+def create_sinc_filter(filter_length: int,
+                       delay: float, window=DELAY_FILTER_DEFAULT_WINDOW):
     # Credits to:
     # and https://pysdr.org/content/sync.html
 
