@@ -32,8 +32,9 @@ def plot_room(room, output_path=None):
         plt.show()
 
 
-def plot_room_2d(room, output_path=None):
-    fig, axs = plt.subplots(nrows=2, figsize=(5, 7))
+def plot_room_2d(room, output_path=None, axs=None):
+    if axs is None:
+        fig, axs = plt.subplots(nrows=2, figsize=(5, 7))
 
     _plot_room_2d(room, axs[0])
     _plot_room_2d(room, axs[1], mode="xz")
