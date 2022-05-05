@@ -16,7 +16,7 @@ Another important addition is the option to use measured impulse responses inste
 ## Installation
 
 ### Option 1: Install as a package
-`pip install --index-url https://test.pypi.org/simple/ pyroomasync`
+`pip install --extra-index-url https://test.pypi.org/simple/ pyroomasync`
 
 ### Option 2: Install requirements and run from directory
 1. Optional: Set up and activate a virtual environment such as [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/command_ref.html)
