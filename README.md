@@ -2,14 +2,13 @@
 
 ## Introduction
 
-Microphone arrays have been used for many audio signal processing tasks such as source localization and speech enhancement. In an ideal cenario, these microphones are fully synchronized, arriving at the same time at a processing unit which is able to gather and the signals. For some practical cenarios, the microphones may be connected using different networks (WiFi versus Ethernet, for example). Furthermore, these devices may have different sampling rates.
+Microphone arrays have been used for many audio signal processing tasks such as source localization and speech enhancement. In an ideal cenario, these microphones are fully synchronized, arriving at the same time at a processing unit which is able to gather and the signals. In practical cenarios, the microphones may be connected using different networks (WiFi versus Ethernet, for example). Furthermore, these devices may have different sampling rates.
 
 This project extends the functionality of the [pyroomacoustics](https://github.com/LCAV/pyroomacoustics/)
 package to simulate such asynchronous microphone networks. It allows microphones to have:
 
-* Different latencies with respect to a processing unit (10ms and 100ms, for example)
-* Different sampling rates (16.000Hz vs 32.000Hz, for example)
-* Imprecise sampling rates (16.000Hz vs 16.001Hz, for example)
+* Different latencies with respect to the fusion centre (10ms and 100ms, for example)
+* Sampling rate offsets (16.000Hz vs 16.001Hz, for example)
 
 Another important addition is the option to use measured impulse responses instead of simulating them using the image source model.
 
