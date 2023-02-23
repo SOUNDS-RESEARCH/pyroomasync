@@ -31,9 +31,15 @@ def plot_room(room, output_path=None):
         plt.show()
 
 
-def plot_room_2d(room, output_path=None, axs=None):
+def plot_room_2d(room, output_path=None, axs=None, mode="row"):
     if axs is None:
-        fig, axs = plt.subplots(nrows=2, figsize=(5, 7))
+        if mode == "row":
+            n_rows, n_cols = (1, 2)
+            figsize = (5, 7)
+        elif mode == "col":
+            n_rows, n_cols = (2, 1)
+            figsize = (7, 5)
+        fig, axs = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=figsize)
 
     _plot_room_2d(room, axs[0])
     _plot_room_2d(room, axs[1], mode="xz")
@@ -51,9 +57,11 @@ def _plot_room_2d(room, ax=None, output_path=None, mode="xy"):
     if mode == "xy":
         idxs = [0, 1]
         labels = ["width", "length"]
+        title = "Aerial view"
     elif mode == "xz":
         idxs = [0, 2]
         labels = ["width", "height"]
+        title = "Lateral view"
 
     ax.set_xlim(-margin, room.dims[idxs[0]] + margin)
     ax.set_ylim(-margin, room.dims[idxs[1]] + margin)
@@ -82,6 +90,7 @@ def _plot_room_2d(room, ax=None, output_path=None, mode="xy"):
     ax.set_aspect("equal")
     ax.set_xlabel(f"Room {labels[0]} (m)")
     ax.set_ylabel(f"Room {labels[1]} (m)")
+    ax.set_title(title)
 
     ax.legend()
     ax.grid()
