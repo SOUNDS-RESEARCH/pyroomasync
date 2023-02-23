@@ -1,4 +1,4 @@
-from pyroomasync.settings import DEFAULT_ROOM_FS
+from .settings import DEFAULT_ROOM_FS
 
 
 class Sources:

@@ -1,7 +1,7 @@
 import json
 import librosa
 
-from pyroomasync.room import ConnectedShoeBox
+from ..room import ConnectedShoeBox
 
 
 def from_experiment_config_json(file_path_or_json):

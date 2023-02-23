@@ -5,10 +5,10 @@ import pyroomacoustics as pra
 
 from pyroomacoustics import ShoeBox, circular_2D_array
 
-from pyroomasync.microphone_network import MicrophoneNetwork
-from pyroomasync.sources import Sources
-from pyroomasync.rirs import Rirs
-from pyroomasync.settings import DEFAULT_ROOM_FS
+from .microphone_network import MicrophoneNetwork
+from .sources import Sources
+from .rirs import Rirs
+from .settings import DEFAULT_ROOM_FS
 
 
 class ConnectedShoeBox:

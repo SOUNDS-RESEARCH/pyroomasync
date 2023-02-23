@@ -2,7 +2,7 @@ import numpy as np
 
 from math import floor
 
-from pyroomasync.settings import (
+from .settings import (
     DELAY_FILTER_LENGTH, DELAY_FILTER_DEFAULT_WINDOW
 )
 

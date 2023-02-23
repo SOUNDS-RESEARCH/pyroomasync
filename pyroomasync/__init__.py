@@ -1,3 +1,3 @@
-from pyroomasync.room import ConnectedShoeBox
-from pyroomasync.utils.room_creator import from_experiment_config_json
-from pyroomasync.simulator import simulate
+from .room import ConnectedShoeBox
+from .utils.room_creator import from_experiment_config_json
+from .simulator import simulate

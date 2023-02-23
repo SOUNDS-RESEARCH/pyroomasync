@@ -2,9 +2,9 @@ import numpy as np
 
 from librosa import resample
 
-from pyroomasync.rirs import convolve, normalize
-from pyroomasync.room import ConnectedShoeBox
-from pyroomasync.delay import add_delays
+from .rirs import convolve, normalize
+from .room import ConnectedShoeBox
+from .delay import add_delays
 
 
 def simulate(room: ConnectedShoeBox, **kwargs):
